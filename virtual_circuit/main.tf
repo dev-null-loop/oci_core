@@ -1,3 +1,7 @@
+data "oci_core_fast_connect_provider_services" "fc_providers" {
+  compartment_id = var.compartment_ids[var.fastconnect_params[keys(var.fastconnect_params)[0]].compartment_name]
+}
+
 resource "oci_core_virtual_circuit" "this" {
   for_each                  = var.fastconnect_params
   compartment_id            = var.compartment_ids[each.value.compartment_name]
