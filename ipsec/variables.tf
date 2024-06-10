@@ -8,6 +8,11 @@ variable "drg_id" {
   type        = string
 }
 
+variable "cpe_id" {
+  description = "(Required) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the CPE."
+  type        = string
+}
+
 variable "static_routes" {
   description = "(Required) (Updatable) Static routes to the CPE. A static route's CIDR must not be a multicast address or class E address."
   type        = list(string)
