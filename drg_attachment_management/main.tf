@@ -1,9 +1,9 @@
 resource "oci_core_drg_attachment_management" "this" {
+  compartment_id     = var.compartment_id
   attachment_type    = var.attachment_type
-  compartment_id     = var.compartment_ocid
-  network_id         = var.network_id
   drg_id             = var.drg_id
   display_name       = var.display_name
+  network_id         = var.network_id
   drg_route_table_id = var.drg_route_table_id
 }
 
