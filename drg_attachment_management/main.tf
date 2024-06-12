@@ -8,10 +8,13 @@ resource "oci_core_drg_attachment_management" "this" {
   defined_tags       = var.defined_tags
   freeform_tags      = var.freeform_tags
 
-  network_details {
-    id                  = var.network_details.id
-    ipsec_connection_id = var.network_details.ipsec_connection_id
-    route_table_id      = var.network_details.route_table_id
-    type                = var.network_details.type
+  dynamic "network_details" {
+    for_each = var.network_details[*]
+    content {
+      id                  = var.network_details.id
+      ipsec_connection_id = var.network_details.ipsec_connection_id
+      route_table_id      = var.network_details.route_table_id
+      type                = var.network_details.type
+    }
   }
 }
