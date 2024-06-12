@@ -46,10 +46,10 @@ variable "freeform_tags" {
 variable "network_details" {
   description = "(Optional) (Updatable)"
   type = object({
-    id                  = string
+    id                  = optional(string)
     ipsec_connection_id = optional(string)
     route_table_id      = optional(string)
-    type                = string
+    type                = optional(string)
   })
   default = null
 }
