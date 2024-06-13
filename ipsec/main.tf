@@ -79,7 +79,7 @@ resource "oci_core_ipsec_connection_tunnel_management" "this" {
 resource "oci_core_ipsec_connection_tunnel_management" "that" {
   ipsec_id      = oci_core_ipsec.this.id
   tunnel_id     = local.tunnels[1]
-  display_name  = "two:not_used"
+  display_name  = "two"
   shared_secret = var.shared_secret
   ike_version   = var.ike_version
 
