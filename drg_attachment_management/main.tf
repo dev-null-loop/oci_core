@@ -5,8 +5,8 @@ resource "oci_core_drg_attachment_management" "this" {
   network_id         = var.network_id
   display_name       = var.display_name
   drg_route_table_id = var.drg_route_table_id
-  defined_tags       = var.defined_tags
-  freeform_tags      = var.freeform_tags
+  # defined_tags       = var.defined_tags
+  # freeform_tags      = var.freeform_tags
 
   dynamic "network_details" {
     for_each = var.network_details[*]
