@@ -15,7 +15,7 @@ output "tunnel_that_id" {
 
 output "tunnels" {
   value = {
-    oci_core_ipsec_connection_tunnel_management.this.display_name = oci_core_ipsec_connection_tunnel_management.this.id
-    oci_core_ipsec_connection_tunnel_management.that.display_name = oci_core_ipsec_connection_tunnel_management.that.id
+    "${oci_core_ipsec_connection_tunnel_management.this.display_name}" = oci_core_ipsec_connection_tunnel_management.this.id
+    "${oci_core_ipsec_connection_tunnel_management.that.display_name}" = oci_core_ipsec_connection_tunnel_management.that.id
   }
 }
