@@ -3,7 +3,7 @@ resource "oci_core_drg" "this" {
   defined_tags   = var.defined_tags
   display_name   = var.display_name
   freeform_tags  = var.freeform_tags
-  providers = {
+  provider = {
     oci.requestor = oci.requestor
     oci.acceptor  = oci.acceptor
   }
