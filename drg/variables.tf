@@ -20,7 +20,3 @@ variable "freeform_tags" {
   type        = map(string)
   default     = {}
 }
-
-variable "tenancy_ocid" {
-  type = string
-}
