@@ -1,4 +1,4 @@
-variable "providers" {
+variable "provider_list" {
   type = list(string)
   # oci.acceptor, oci.requestor
 }
