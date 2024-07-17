@@ -1,0 +1,80 @@
+---
+- name: Connecting to host
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Install lvm2 package
+      package:
+        name: lvm2
+        state: present
+    - name: Run gdisk command interactively
+      shell: |
+           gdisk /dev/sdb <<EOF
+           n
+           1
+           2048
+           104857566
+           8e00
+           w
+           y
+           EOF
+    - name: Remove existing volume group
+      shell: vgremove -f vg1
+      ignore_errors: true
+    - name: task for creating volume group
+      lvg:
+          vg: vg1
+          pvs: /dev/sdb1
+    - name: task for creating logical volume1
+      lvol:
+          vg: vg1
+          lv: lv1
+          size: 25g
+          force: yes
+    - name: task for creating logical volume
+      lvol:
+          vg: vg1
+          lv: lv2
+          size: 20g
+          force: yes
+    - name: Create directory u01 if does not exist
+      file:
+        path: /u01
+        state: directory
+        mode: '0755'
+    - name: Create directory u02 if does not exist
+      file:
+        path: /u02
+        state: directory
+        mode: '0755'
+    - name: format the xfs filesystem of lv1
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg1/lv1
+    - name: format the xfs filesystem of lv2
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg1/lv2
+    - name: mount the lv1 on /u01
+      mount:
+        path: /u01
+        src: /dev/vg1/lv1
+        fstype: xfs
+        state: mounted
+    - name: mount the lv2 on /u02
+      mount:
+        path: /u02
+        src: /dev/vg1/lv2
+        fstype: xfs
+        state: mounted
+    - name: Add lv1 to /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/vg1/lv1 /u01 xfs defaults,nofail 0 0"
+        insertafter: EOF
+    - name: Add lv2 to /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/vg1/lv2 /u02 xfs defaults,nofail 0 0"
+        insertafter: EOF
