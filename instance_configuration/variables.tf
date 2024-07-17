@@ -43,3 +43,43 @@ variable "create_details" {
     freeform_tags       = map(string)
   })
 }
+
+variable "shape" {
+  description = "(Applicable when instance_type=compute) The shape of an instance. The shape determines the number of CPUs, amount of memory, and other resources allocated to the instance."
+  type        = string
+  default     = "VM.Standard2.1"
+}
+
+variable "source_details" {
+  description = "(Applicable when instance_type=instance_options)"
+  type = object({
+    source_type             = string
+    boot_volume_size_in_gbs = number
+    image_id                = string
+  })
+  default = null
+}
+
+variable "attach_details" {
+  description = "(Applicable when instance_type=compute) Volume attachmentDetails. Please see [AttachVolumeDetails](https://docs.cloud.oracle.com/iaas/api/#/en/iaas/latest/AttachVolumeDetails/)"
+  type = object({
+    type         = string
+    is_read_only = bool
+    is_shareable = bool
+  })
+}
+
+variable "launch_details" {
+  type = object({
+    availability_domain  = number
+    compartment_id       = string
+    shape                = string
+    dedicated_vm_host_id = optional(string)
+    defined_tags         = optional(map(string))
+    display_name         = optional(string)
+    extended_metadata    = optional(map(string))
+    fault_domain         = number
+    freeform_tags        = optional(map(string))
+  })
+  default = null
+}
