@@ -1,0 +1,56 @@
+data "oci_identity_availability_domains" "these" {
+  compartment_id = var.compartment_id
+}
+
+locals {
+  ads = data.oci_identity_availability_domains.these.availability_domains
+}
+
+resource "oci_core_volume_group" "this" {
+  availability_domain = local.ads[var.availability_domain - 1].name
+  compartment_id      = var.compartment_id
+  backup_policy_id    = var.backup_policy_id
+  defined_tags        = var.defined_tags
+  display_name        = var.display_name
+  freeform_tags       = var.freeform_tags
+  volume_ids          = var.volume_ids
+
+  dynamic "source_details" {
+    for_each = var.source_details[*]
+    content {
+      type                    = var.source_details.type
+      volume_group_backup_id  = var.source_details.volume_group_backup_id
+      volume_group_id         = var.source_details.volume_group_id
+      volume_group_replica_id = var.source_details.volume_group_replica_id
+      volume_ids              = var.source_details.volume_ids
+    }
+  }
+
+  dynamic "volume_group_replicas" {
+    for_each = var.volume_group_replicas != null ? var.volume_group_replicas : []
+    iterator = vgr
+    content {
+      availability_domain = vgr.value.availability_domain
+      display_name        = vgr.value.display_name
+    }
+  }
+
+  # provisioner "local-exec" {
+  #   # oci bv volume-group create --source-details '{"type": "volumeGroupReplicaId", "volumeGroupReplicaId": "ocid1.volumegroupreplica.oc1.eu-amsterdam-1.abqw2ljrfmqrwl7uq5bydw2tch7k6jtnf744wkpvoue5evuzbtjsbfxa2dwa"}'
+  #   # --compartment-id ocid1.compartment.oc1..aaaaaaaahaz26fqhyi3fezbueousr53okuox7iayrmqik4hatmq6o3i3f35q \
+  #   #--availability-domain vuTf:eu-amsterdam-1-AD-1 --region eu-amsterdam-1
+  #   interpreter = ["/bin/bash", "-c"]
+  #   command     = <<-EOT
+  #   oci bv volume-group create --source-details --volume-group-id ${self.id} --volume-group-replicas '[]'
+  #   EOT
+  # }
+
+  # Volume group cannot be deleted while replication is enabled. Disable replication before deleting the volume group.
+  provisioner "local-exec" {
+    when        = destroy
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<-EOT
+    oci bv volume-group update --force --volume-group-id ${self.id} --volume-group-replicas '[]'
+    EOT
+  }
+}
