@@ -48,6 +48,7 @@ variable "volume_group_replicas" {
   type = list(object({
     availability_domain = string
     display_name        = optional(string)
+    region              = string
   }))
   default = []
 

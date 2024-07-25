@@ -35,17 +35,17 @@ resource "oci_core_volume_group" "this" {
     }
   }
 
-  # provisioner "local-exec" {
-  #   # oci bv volume-group create --source-details '{"type": "volumeGroupReplicaId", "volumeGroupReplicaId": "ocid1.volumegroupreplica.oc1.eu-amsterdam-1.abqw2ljrfmqrwl7uq5bydw2tch7k6jtnf744wkpvoue5evuzbtjsbfxa2dwa"}'
-  #   # --compartment-id ocid1.compartment.oc1..aaaaaaaahaz26fqhyi3fezbueousr53okuox7iayrmqik4hatmq6o3i3f35q \
-  #   #--availability-domain vuTf:eu-amsterdam-1-AD-1 --region eu-amsterdam-1
-  #   interpreter = ["/bin/bash", "-c"]
-  #   command     = <<-EOT
-  #   oci bv volume-group create --source-details --volume-group-id ${self.id} --volume-group-replicas '[]'
-  #   EOT
-  # }
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command = templatefile("./activate_replica.tmpl", {
+      compartment_id                           = var.compartment_id
+      volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
+      volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
+      volume_group_replica_region              = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+    })
+  }
 
-  # Volume group cannot be deleted while replication is enabled. Disable replication before deleting the volume group.
+  # NOTE: disable replication before deleting the volume group.
   provisioner "local-exec" {
     when        = destroy
     interpreter = ["/bin/bash", "-c"]

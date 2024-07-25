@@ -1,0 +1,15 @@
+while true; do
+    STATE=$(oci bv volume-group-replica get --volume-group-replica-id ${volume_group_replica_id} --region ${volume_group_replica_region} | jq -r '.data."lifecycle-state"')
+    if [ "$STATE" != "AVAILABLE" ]; then
+	echo "Still creating... [60s sleep]"
+	sleep 60
+    else
+	echo "Volume group replica provisioned in region ${volume_group_replica_region}, activating..."
+	oci bv volume-group create \
+	    --source-details '{"type": "volumeGroupReplicaId", "volumeGroupReplicaId": "${volume_group_replica_id}"}' \
+	    --compartment-id ${compartment_id} \
+	    --availability-domain ${volume_group_replica_availability_domain} \
+	    --region ${volume_group_replica_region}
+	break
+    fi
+done
