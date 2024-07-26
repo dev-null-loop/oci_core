@@ -39,7 +39,7 @@ resource "oci_core_instance" "this" {
     is_monitoring_disabled   = var.is_monitoring_disabled
 
     dynamic "plugins_config" {
-      for_each = var.enabled_plugins[*]
+      for_each = var.enabled_plugins != null ? var.enabled_plugins : []
       content {
 	desired_state = "ENABLED"
 	name          = plugins_config.value
