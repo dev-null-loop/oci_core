@@ -179,3 +179,9 @@ variable "cloud_init" {
   }))
   default = {}
 }
+
+variable "state" {
+  description = "(Optional) (Updatable) The target state for the instance. Could be set to RUNNING or STOPPED."
+  type        = string
+  default     = "RUNNING"
+}

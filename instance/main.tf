@@ -31,6 +31,7 @@ resource "oci_core_instance" "this" {
   preserve_boot_volume                = var.preserve_boot_volume
   freeform_tags                       = var.freeform_tags
   is_pv_encryption_in_transit_enabled = var.encrypt_in_transit
+  state                               = var.state
 
   agent_config {
     are_all_plugins_disabled = var.are_all_plugins_disabled
@@ -40,8 +41,8 @@ resource "oci_core_instance" "this" {
     dynamic "plugins_config" {
       for_each = var.enabled_plugins[*]
       content {
-        desired_state = "ENABLED"
-        name          = plugins_config.value
+	desired_state = "ENABLED"
+	name          = plugins_config.value
       }
     }
   }
