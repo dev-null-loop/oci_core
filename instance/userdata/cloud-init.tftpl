@@ -1,12 +1,3 @@
 #!/bin/bash
 yum -y install unzip libsmbclient samba-client cifs-utils iptables-services ansible
-useradd -m -s /bin/bash toor
-echo "toor:Prospero1234" | chpasswd
-echo "toor ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-echo "Match User toor" >> /etc/ssh/sshd_config
-echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 systemctl restart sshd
-systemctl stop firewalld
-systemctl disable firewalld
-systemctl restart iptables
-sed -i '/:OUTPUT ACCEPT/a -A INPUT -j ACCEPT' /etc/sysconfig/iptables
