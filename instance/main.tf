@@ -32,6 +32,7 @@ resource "oci_core_instance" "this" {
   freeform_tags                       = var.freeform_tags
   is_pv_encryption_in_transit_enabled = var.encrypt_in_transit
   state                               = var.state
+  instance_configuration_id           = var.instance_configuration_id
 
   agent_config {
     are_all_plugins_disabled = var.are_all_plugins_disabled

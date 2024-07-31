@@ -185,3 +185,9 @@ variable "state" {
   type        = string
   default     = "RUNNING"
 }
+
+variable "instance_configuration_id" {
+  description = "(Optional) The OCID of the Instance Configuration containing instance launch details. Any other fields supplied in this instance launch request will override the details stored in the Instance Configuration for this instance launch."
+  type        = string
+  default     = null
+}
