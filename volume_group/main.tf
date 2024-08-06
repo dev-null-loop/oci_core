@@ -37,7 +37,7 @@ resource "oci_core_volume_group" "this" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command = templatefile("./activate_replica.tmpl", {
+    command = templatefile("${path.module}/activate_replica.tmpl", {
       compartment_id                           = var.compartment_id
       volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
       volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
