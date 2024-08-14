@@ -67,7 +67,7 @@ variable "is_bfd_enabled" {
 variable "is_transport_mode" {
   description = "(Optional) (Updatable) Set to `true` for the virtual circuit to carry only encrypted traffic, or set to `false` for the virtual circuit to carry unencrypted traffic. If this is not set, the default is `false`."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "provider_service_id" {

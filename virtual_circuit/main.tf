@@ -16,6 +16,7 @@ resource "oci_core_virtual_circuit" "this" {
   provider_service_key_name = var.provider_service_key_name
   region                    = var.region
   routing_policy            = var.routing_policy
+  is_transport_mode         = var.is_transport_mode
 
   dynamic "cross_connect_mappings" {
     for_each = var.cross_connect_mappings != [] ? var.cross_connect_mappings : []
