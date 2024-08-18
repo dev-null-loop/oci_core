@@ -15,6 +15,7 @@ resource "oci_core_volume_group" "this" {
   freeform_tags       = var.freeform_tags
   volume_ids          = var.volume_ids
 
+  # TODO: add datasource to validate source ids exist
   dynamic "source_details" {
     for_each = var.source_details[*]
     content {
@@ -37,20 +38,26 @@ resource "oci_core_volume_group" "this" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command = templatefile("${path.module}/activate_replica.tmpl", {
-      compartment_id                           = var.compartment_id
-      volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
-      volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
-      volume_group_replica_region              = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
-    })
+    command = (
+      var.activate_replica == true && length(var.volume_group_replicas) > 0 ?
+      templatefile("${path.module}/activate_replica.tmpl", {
+	compartment_id                           = var.compartment_id
+	volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
+	volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
+	volume_group_replica_region              = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+      }) :
+      "/bin/true"
+    )
   }
 
-  # NOTE: disable replication before deleting the volume group.
   provisioner "local-exec" {
     when        = destroy
     interpreter = ["/bin/bash", "-c"]
-    command     = <<-EOT
-    oci bv volume-group update --force --volume-group-id ${self.id} --volume-group-replicas '[]'
-    EOT
+    command = (
+      length(self.volume_group_replicas) > 0 ?
+      "oci bv volume-group update --force --volume-group-id ${self.id} --volume-group-replicas '[]'"
+      :
+      "/bin/true"
+    )
   }
 }

@@ -49,17 +49,24 @@ variable "volume_group_replicas" {
     availability_domain = string
     display_name        = optional(string)
     region              = string
+    activate            = bool
   }))
-  default = []
 
   validation {
     condition     = alltrue([for i in var.volume_group_replicas : can(regex("^(....):(..)-(.*)-[1-9]-(..)-[1-3]", i.availability_domain))])
     error_message = "Error: volume group replica availability_domain format is xxxx:xx-xxxxxxxx-[1-9]-AD-[1-3], e.g vuTf:eu-amsterdam-1-AD-3"
   }
+
+  default = []
 }
 
 variable "volume_ids" {
   description = "(Optional) (Updatable) Use this for update operation only. This field is not supported during creation. For create use `volume_ids` under `source_details`."
   type        = list(string)
   default     = null
+}
+
+variable "activate_replica" {
+  type    = bool
+  default = false
 }
