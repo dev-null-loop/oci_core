@@ -39,6 +39,20 @@ resource "oci_core_volume_group" "this" {
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     command = (
+      length(var.volume_group_replicas) > 0 ?
+      templatefile("${path.module}/wait_for_replica.tmpl", {
+	compartment_id                           = var.compartment_id
+	volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
+	volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
+	volume_group_replica_region              = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+      }) :
+      "/bin/true"
+    )
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command = (
       var.activate_replica == true && length(var.volume_group_replicas) > 0 ?
       templatefile("${path.module}/activate_replica.tmpl", {
 	compartment_id                           = var.compartment_id
