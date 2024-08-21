@@ -69,8 +69,10 @@ resource "oci_core_volume_group" "this" {
     interpreter = ["/bin/bash", "-c"]
     command = (
       length(self.volume_group_replicas) > 0 ?
-      "oci bv volume-group update --force --volume-group-id ${self.id} --volume-group-replicas '[]'"
-      :
+      templatefile("${path.module}/disable_replica.tmpl", {
+	volume_group_id = self.id
+	region          = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+      }) :
       "/bin/true"
     )
   }
