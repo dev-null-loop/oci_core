@@ -7,13 +7,14 @@ locals {
 }
 
 resource "oci_core_volume_group" "this" {
-  availability_domain = local.ads[var.availability_domain - 1].name
-  compartment_id      = var.compartment_id
-  backup_policy_id    = var.backup_policy_id
-  defined_tags        = var.defined_tags
-  display_name        = var.display_name
-  freeform_tags       = var.freeform_tags
-  volume_ids          = var.volume_ids
+  availability_domain            = local.ads[var.availability_domain - 1].name
+  compartment_id                 = var.compartment_id
+  backup_policy_id               = var.backup_policy_id
+  defined_tags                   = var.defined_tags
+  display_name                   = var.display_name
+  freeform_tags                  = var.freeform_tags
+  volume_ids                     = var.volume_ids
+  volume_group_replicas_deletion = true
 
   # TODO: add datasource to validate source ids exist
   dynamic "source_details" {
