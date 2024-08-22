@@ -68,3 +68,9 @@ variable "activate_replica" {
   type    = bool
   default = false
 }
+
+variable "volume_group_replicas_deletion" {
+  description = "(Optional) (Updatable) If true, will attempt to delete the volume_group_replicas. If false (default) do nothing"
+  type        = bool
+  default     = false
+}

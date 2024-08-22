@@ -14,7 +14,7 @@ resource "oci_core_volume_group" "this" {
   display_name                   = var.display_name
   freeform_tags                  = var.freeform_tags
   volume_ids                     = var.volume_ids
-  volume_group_replicas_deletion = true
+  volume_group_replicas_deletion = var.volume_group_replicas_deletion
 
   # TODO: add datasource to validate source ids exist
   dynamic "source_details" {
