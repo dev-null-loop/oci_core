@@ -31,17 +31,6 @@ variable "image_id" {
   type        = string
 }
 
-# variable "schema_data" {
-#   description = "(Required) (Updatable) The map of each capability name to its ImageCapabilitySchemaDescriptor."
-#   type = map(object({
-#     defaultValue   = optional(string)
-#     descriptorType = optional(string)
-#     source         = string
-#     values         = optional(list(string))
-#   }))
-#   default = {}
-# }
-
 variable "descriptors" {
   type = list(string)
   default = [
@@ -61,10 +50,12 @@ variable "descriptors" {
   ]
 }
 
-variable "encryption_in_transit" {
-  type = object({
+variable "schema_data" {
+  description = "(Required) (Updatable) The map of each capability name to its ImageCapabilitySchemaDescriptor."
+  type = map(object({
     descriptorType = string
     defaultValue   = bool
     source         = string
-  })
+    values         = optional(list(string))
+  }))
 }

@@ -8,6 +8,6 @@ resource "oci_core_compute_image_capability_schema" "this" {
 
   # if using var as key in map, enclose in parenthesis
   schema_data = {
-    ("Storage.ParaVirtualization.EncryptionInTransit") = jsonencode(var.encryption_in_transit)
+    for k, v in var.schema_data : (k) => jsonencode(v)
   }
 }
