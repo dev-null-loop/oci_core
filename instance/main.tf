@@ -13,12 +13,12 @@ data "cloudinit_config" "this" {
   }
 }
 
-data "oci_identity_availability_domains" "this" {
+data "oci_identity_availability_domains" "these" {
   compartment_id = var.compartment_id
 }
 
 locals {
-  ads             = data.oci_identity_availability_domains.this.availability_domains
+  ads             = data.oci_identity_availability_domains.these.availability_domains
   cloudinit_files = var.cloud_init != null ? { for k, v in var.cloud_init : k => v } : {}
 }
 
