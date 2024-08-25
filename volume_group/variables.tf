@@ -80,9 +80,3 @@ variable "preserve_volume_replica" {
   type        = bool
   default     = false
 }
-
-variable "volume_group_replicas_deletion" {
-  description = "(Optional) (Updatable) Specifies whether to enable or not the deletion of the replica"
-  type        = bool
-  default     = false
-}
