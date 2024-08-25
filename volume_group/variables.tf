@@ -74,3 +74,15 @@ variable "volume_group_replicas_deletion" {
   type        = bool
   default     = false
 }
+
+variable "preserve_volume_replica" {
+  description = "(Optional) (Updatable) Specifies whether to disable or preserve the individual volume replication when removing a volume from the replication enabled volume group. When set to `true`, the individual volume replica is preserved. The default value is true."
+  type        = bool
+  default     = false
+}
+
+variable "volume_group_replicas_deletion" {
+  description = "(Optional) (Updatable) Specifies whether to enable or not the deletion of the replica"
+  type        = bool
+  default     = false
+}
