@@ -17,18 +17,18 @@ resource "oci_core_instance_configuration" "this" {
 
     block_volumes {
       attach_details {
-	type         = var.attach_details.type
-	is_read_only = var.attach_details.is_read_only
-	is_shareable = var.attach_details.is_shareable
+        type         = var.attach_details.type
+        is_read_only = var.attach_details.is_read_only
+        is_shareable = var.attach_details.is_shareable
       }
 
       create_details {
-	availability_domain = local.ads[var.availability_domain - 1].name
-	compartment_id      = var.create_details.compartment_id
-	display_name        = var.create_details.display_name
-	kms_key_id          = var.create_details.kms_key_id
-	size_in_gbs         = var.create_details.size_in_gbs
-	freeform_tags       = var.create_details.freeform_tags
+        availability_domain = local.ads[var.availability_domain - 1].name
+        compartment_id      = var.create_details.compartment_id
+        display_name        = var.create_details.display_name
+        kms_key_id          = var.create_details.kms_key_id
+        size_in_gbs         = var.create_details.size_in_gbs
+        freeform_tags       = var.create_details.freeform_tags
       }
     }
 
@@ -45,11 +45,11 @@ resource "oci_core_instance_configuration" "this" {
 
 
       create_vnic_details {
-	assign_public_ip = false
+        assign_public_ip = false
       }
 
       metadata = {
-	ssh_authorized_keys = ""
+        ssh_authorized_keys = ""
       }
 
       # dynamic "shape_config" {
@@ -61,9 +61,9 @@ resource "oci_core_instance_configuration" "this" {
       # }
 
       source_details {
-	source_type             = var.source_details.source_type
-	boot_volume_size_in_gbs = var.source_details.boot_volume_size_in_gbs
-	image_id                = var.source_details.image_id
+        source_type             = var.source_details.source_type
+        boot_volume_size_in_gbs = var.source_details.boot_volume_size_in_gbs
+        image_id                = var.source_details.image_id
       }
     }
 
