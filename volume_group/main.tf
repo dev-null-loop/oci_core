@@ -43,10 +43,10 @@ resource "oci_core_volume_group" "this" {
     command = (
       length(var.volume_group_replicas) > 0 ?
       templatefile("${path.module}/wait_for_replica.tmpl", {
-	compartment_id                           = var.compartment_id
-	volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
-	volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
-	volume_group_replica_region              = replace("${self.volume_group_replicas[0].availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+        compartment_id                           = var.compartment_id
+        volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
+        volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
+        volume_group_replica_region              = replace(self.volume_group_replicas[0].availability_domain, "/(.*):|(-AD-[1-3])/", "")
       }) :
       "/bin/true"
     )
@@ -72,8 +72,8 @@ resource "oci_core_volume_group" "this" {
     command = (
       length(self.volume_group_replicas) > 0 ?
       templatefile("${path.module}/disable_replica.tmpl", {
-	volume_group_id = self.id
-	region          = replace("${self.availability_domain}", "/(.*):|(-AD-[1-3])/", "")
+        volume_group_id = self.id
+        region          = replace(self.availability_domain, "/(.*):|(-AD-[1-3])/", "")
       }) :
       "/bin/true"
     )
