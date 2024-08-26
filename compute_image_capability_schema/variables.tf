@@ -31,25 +31,6 @@ variable "image_id" {
   type        = string
 }
 
-variable "descriptors" {
-  type = list(string)
-  default = [
-    "Compute.AMD_SecureEncryptedVirtualization",
-    "Compute.Firmware",
-    "Compute.LaunchMode",
-    "Compute.SecureBoot",
-    "Network.AttachmentType",
-    "Network.IPv6Only",
-    "Storage.BootVolumeType",
-    "Storage.ConsistentVolumeNaming",
-    "Storage.Iscsi.MultipathDeviceSupported",
-    "Storage.LocalDataVolumeType",
-    "Storage.ParaVirtualization.AttachmentVersion",
-    "Storage.ParaVirtualization.EncryptionInTransit",
-    "Storage.RemoteDataVolumeType"
-  ]
-}
-
 variable "schema_data" {
   description = "(Required) (Updatable) The map of each capability name to its ImageCapabilitySchemaDescriptor."
   type = map(object({

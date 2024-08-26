@@ -5,9 +5,7 @@ resource "oci_core_compute_image_capability_schema" "this" {
   defined_tags                                        = var.defined_tags
   display_name                                        = var.display_name
   freeform_tags                                       = var.freeform_tags
-
-  # if using var as key in map, enclose in parenthesis
-  schema_data = {
+  schema_data = { # if using var as key in map, enclose in parenthesis
     for k, v in var.schema_data : (k) => jsonencode(v)
   }
 }
