@@ -64,11 +64,6 @@ variable "volume_ids" {
   default     = null
 }
 
-# variable "activate_replica" {
-#   type    = bool
-#   default = false
-# }
-
 variable "volume_group_replicas_deletion" {
   description = "(Optional) (Updatable) If true, will attempt to delete the volume_group_replicas. If false (default) do nothing"
   type        = bool
@@ -79,4 +74,10 @@ variable "preserve_volume_replica" {
   description = "(Optional) (Updatable) Specifies whether to disable or preserve the individual volume replication when removing a volume from the replication enabled volume group. When set to `true`, the individual volume replica is preserved. The default value is true."
   type        = bool
   default     = false
+}
+
+
+variable "config_file_profile" {
+  description = "(Optional) (Updatable) Configuration file (~/.oci/config) profile to be used in `oci` requests"
+  default     = "DEFAULT"
 }

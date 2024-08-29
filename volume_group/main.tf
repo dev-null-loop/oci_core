@@ -47,6 +47,7 @@ resource "oci_core_volume_group" "this" {
 	volume_group_replica_id                  = self.volume_group_replicas[0].volume_group_replica_id
 	volume_group_replica_availability_domain = self.volume_group_replicas[0].availability_domain
 	volume_group_replica_region              = lower(replace(self.volume_group_replicas[0].availability_domain, "/(.*):|(-AD-[1-3])/", ""))
+	config_file_profile                      = var.config_file_profile
       }) :
       "/bin/true"
     )
