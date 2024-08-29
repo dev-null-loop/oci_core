@@ -73,9 +73,8 @@ resource "oci_core_volume_group" "this" {
     command = (
       length(self.volume_group_replicas) > 0 ?
       templatefile("${path.module}/disable_replica.tmpl", {
-	volume_group_id     = self.id
-	region              = replace(self.availability_domain, "/(.*):|(-AD-[1-3])/", "")
-	config_file_profile = var.config_file_profile
+	volume_group_id = self.id
+	region          = replace(self.availability_domain, "/(.*):|(-AD-[1-3])/", "")
       }) :
       "/bin/true"
     )
