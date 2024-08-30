@@ -3,7 +3,7 @@ data "oci_identity_availability_domains" "these" {
 }
 
 locals {
-  ads = data.oci_identity_availability_domains.this.availability_domains
+  ads = data.oci_identity_availability_domains.these.availability_domains
 }
 
 resource "oci_core_boot_volume" "this" {
