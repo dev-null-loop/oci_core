@@ -58,7 +58,7 @@ variable "autotune_policies" {
 variable "block_volume_replicas" {
   description = "(Optional) (Updatable) The list of block volume replicas to be enabled for this volume in the specified destination availability domains."
   type = object({
-    availability_domain = number
+    availability_domain = string
     display_name        = optional(string)
   })
   nullable = true
