@@ -1,4 +1,4 @@
-data "oci_identity_availability_domains" "this" {
+data "oci_identity_availability_domains" "these" {
   compartment_id = var.compartment_id
 }
 
