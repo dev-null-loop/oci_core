@@ -70,3 +70,8 @@ variable "boot_volume_replicas" {
   })
   default = null
 }
+
+variable "boot_volume_replicas_deletion" {
+  description = "(Optional) (Updatable) enable or disable boot volume replica"
+  type        = bool
+}
