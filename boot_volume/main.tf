@@ -22,7 +22,7 @@ resource "oci_core_boot_volume" "this" {
   }
 
   dynamic "autotune_policies" {
-    for_each = var.autotone_policies[*]
+    for_each = var.autotune_policies[*]
     content {
       autotune_type   = var.autotune_policies_autotune_type
       max_vpus_per_gb = var.autotune_policies_max_vpus_per_gb
