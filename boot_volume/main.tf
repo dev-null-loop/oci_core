@@ -21,13 +21,19 @@ resource "oci_core_boot_volume" "this" {
     type = var.source_details.type
   }
 
-  autotune_policies {
-    autotune_type   = var.autotune_policies_autotune_type
-    max_vpus_per_gb = var.autotune_policies_max_vpus_per_gb
+  dynamic "autotune_policies" {
+    for_each = var.autotone_policies[*]
+    content {
+      autotune_type   = var.autotune_policies_autotune_type
+      max_vpus_per_gb = var.autotune_policies_max_vpus_per_gb
+    }
   }
 
-  boot_volume_replicas {
-    availability_domain = var.boot_volume_replicas.availability_domain
-    display_name        = var.boot_volume_replicas.display_name
+  dynamic "boot_volume_replicas" {
+    for_each = var.boot_volume_replicas[*]
+    content {
+      availability_domain = var.boot_volume_replicas.availability_domain
+      display_name        = var.boot_volume_replicas.display_name
+    }
   }
 }
