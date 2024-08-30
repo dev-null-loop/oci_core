@@ -11,7 +11,7 @@ resource "oci_core_volume" "this" {
   size_in_gbs                    = var.size_in_gbs
   availability_domain            = data.oci_identity_availability_domains.this.availability_domains[var.availability_domain - 1].name
   vpus_per_gb                    = var.vpus_per_gb
-  block_volume_replicas_deletion = true
+  block_volume_replicas_deletion = var.block_volume_replicas_deletion
 
   dynamic "autotune_policies" {
     for_each = var.autotune_policies[*]

@@ -71,3 +71,9 @@ variable "source_details" {
   })
   default = null
 }
+
+variable "block_volume_replicas_deletion" {
+  description = "(Optional) (Updatable) - enable or disable replication"
+  type        = bool
+  default     = false
+}
