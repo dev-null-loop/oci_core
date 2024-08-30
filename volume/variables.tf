@@ -51,8 +51,7 @@ variable "autotune_policies" {
     type            = string
     max_vpus_per_gb = number
   })
-  nullable = true
-  default  = null
+  default = null
 }
 
 variable "block_volume_replicas" {
@@ -61,8 +60,7 @@ variable "block_volume_replicas" {
     availability_domain = string
     display_name        = optional(string)
   })
-  nullable = true
-  default  = null
+  default = null
 }
 
 variable "source_details" {
@@ -71,6 +69,5 @@ variable "source_details" {
     id   = string
     type = string
   })
-  nullable = true
-  default  = null
+  default = null
 }
