@@ -59,16 +59,14 @@ variable "autotune_policies" {
     type            = string
     max_vpus_per_gb = number
   })
-  nullable = true
-  default  = null
+  default = null
 }
 
 variable "boot_volume_replicas" {
   description = "(Optional) (Updatable) The list of boot volume replicas to be enabled for this volume in the specified destination availability domains."
   type = object({
-    availability_domain = number
+    availability_domain = string
     display_name        = optional(string)
   })
-  nullable = true
-  default  = null
+  default = null
 }
