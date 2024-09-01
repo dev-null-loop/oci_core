@@ -20,30 +20,30 @@ resource "oci_core_security_list" "this" {
       destination_type = egress_rules.value.destination_type
 
       dynamic "tcp_options" {
-	iterator = tcp_options
-	for_each = egress_rules.value.tcp_options[*]
-	content {
-	  max = tcp_options.value.max
-	  min = tcp_options.value.min
-	}
+        iterator = tcp_options
+        for_each = egress_rules.value.tcp_options[*]
+        content {
+          max = tcp_options.value.max
+          min = tcp_options.value.min
+        }
       }
 
       dynamic "udp_options" {
-	iterator = udp_options
-	for_each = egress_rules.value.udp_options[*]
-	content {
-	  max = udp_options.value.max
-	  min = udp_options.value.min
-	}
+        iterator = udp_options
+        for_each = egress_rules.value.udp_options[*]
+        content {
+          max = udp_options.value.max
+          min = udp_options.value.min
+        }
       }
 
       dynamic "icmp_options" {
-	iterator = icmp_options
-	for_each = egress_rules.value.icmp_options[*]
-	content {
-	  type = icmp_options.value.type
-	  code = icmp_options.value.code
-	}
+        iterator = icmp_options
+        for_each = egress_rules.value.icmp_options[*]
+        content {
+          type = icmp_options.value.type
+          code = icmp_options.value.code
+        }
       }
     }
   }
@@ -59,30 +59,30 @@ resource "oci_core_security_list" "this" {
       source_type = ingress_rules.value.source_type
 
       dynamic "tcp_options" {
-	iterator = tcp_options
-	for_each = ingress_rules.value.tcp_options[*]
-	content {
-	  max = tcp_options.value.max
-	  min = tcp_options.value.min
-	}
+        iterator = tcp_options
+        for_each = ingress_rules.value.tcp_options[*]
+        content {
+          max = tcp_options.value.max
+          min = tcp_options.value.min
+        }
       }
 
       dynamic "udp_options" {
-	iterator = udp_options
-	for_each = ingress_rules.value.udp_options[*]
-	content {
-	  max = udp_options.value.max
-	  min = udp_options.value.min
-	}
+        iterator = udp_options
+        for_each = ingress_rules.value.udp_options[*]
+        content {
+          max = udp_options.value.max
+          min = udp_options.value.min
+        }
       }
 
       dynamic "icmp_options" {
-	iterator = icmp_options
-	for_each = ingress_rules.value.icmp_options[*]
-	content {
-	  type = icmp_options.value.type
-	  code = icmp_options.value.code
-	}
+        iterator = icmp_options
+        for_each = ingress_rules.value.icmp_options[*]
+        content {
+          type = icmp_options.value.type
+          code = icmp_options.value.code
+        }
       }
     }
   }
