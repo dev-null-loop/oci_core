@@ -1,5 +1,9 @@
-data "oci_identity_availability_domains" "this" {
+data "oci_identity_availability_domains" "these" {
   compartment_id = var.compartment_id
+}
+
+locals {
+  ads = data.oci_identity_availability_domains.these.availability_domains
 }
 
 resource "oci_core_volume" "this" {
@@ -9,7 +13,7 @@ resource "oci_core_volume" "this" {
   freeform_tags                  = var.freeform_tags
   kms_key_id                     = var.kms_key_id
   size_in_gbs                    = var.size_in_gbs
-  availability_domain            = data.oci_identity_availability_domains.this.availability_domains[var.availability_domain - 1].name
+  availability_domain            = local.ads[var.availability_domain - 1].name
   vpus_per_gb                    = var.vpus_per_gb
   block_volume_replicas_deletion = var.block_volume_replicas_deletion
 
