@@ -37,8 +37,8 @@ variable "freeform_tags" {
   default     = {}
 }
 
-variable "encrypt_in_transit" {
-  description = "Enable in-transit encryption for the data volume's"
+variable "is_pv_encryption_in_transit_enabled" {
+  description = "(Optional) Whether to enable in-transit encryption for the data volume's paravirtualized attachment. The default value is false. Use this field only during create. To update use `is_pv_encryption_in_transit_enabled` under `launch_options` instead."
   type        = bool
   default     = false
 }
