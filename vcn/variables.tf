@@ -1,3 +1,12 @@
+variable "byoipv6cidr_details" {
+  description = "(Optional) The list of BYOIPv6 OCIDs and BYOIPv6 prefixes required to create a VCN that uses BYOIPv6 address ranges."
+  type = object({
+    byoipv6range_id = string
+    ipv6cidr_block  = string
+  })
+  default = null
+}
+
 variable "compartment_id" {
   description = "(Required) (Updatable) The OCID of the compartment to contain the VCN."
   type        = string
@@ -10,7 +19,7 @@ variable "cidr_blocks" {
 }
 
 variable "dns_label" {
-  description = "A DNS label for the VCN, used in conjunction with the VNIC's hostname and subnet's DNS label to form a fully qualified domain name (FQDN) for each VNIC within a subnet."
+  description = "(Optional) A DNS label for the VCN, used in conjunction with the VNIC's hostname and subnet's DNS label to form a fully qualified domain name (FQDN) for each VNIC within a subnet."
   type        = string
   default     = null
 }
@@ -43,4 +52,10 @@ variable "ipv6private_cidr_blocks" {
   description = "(Optional) The list of one or more ULA or Private IPv6 CIDR blocks for the vcn that meets the following criteria:"
   type        = list(string)
   default     = []
+}
+
+variable "is_oracle_gua_allocation_enabled" {
+  description = "(Optional) Specifies whether to skip Oracle allocated IPv6 GUA. By default, Oracle will allocate one GUA of /56 size for an IPv6 enabled VCN."
+  type        = bool
+  default     = false
 }
