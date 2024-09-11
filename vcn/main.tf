@@ -10,12 +10,11 @@ resource "oci_core_vcn" "this" {
     }
   }
 
-  cidr_blocks                      = var.cidr_blocks
-  defined_tags                     = var.defined_tags
-  display_name                     = var.display_name
-  dns_label                        = var.dns_label
-  freeform_tags                    = var.freeform_tags
-  ipv6private_cidr_blocks          = var.ipv6private_cidr_blocks
-  is_ipv6enabled                   = var.is_ipv6enabled
-  is_oracle_gua_allocation_enabled = var.is_oracle_gua_allocation_enabled
+  cidr_blocks             = var.cidr_blocks
+  defined_tags            = var.defined_tags
+  display_name            = var.display_name
+  dns_label               = var.dns_label
+  freeform_tags           = var.freeform_tags
+  ipv6private_cidr_blocks = var.ipv6private_cidr_blocks
+  is_ipv6enabled          = var.is_ipv6enabled
 }

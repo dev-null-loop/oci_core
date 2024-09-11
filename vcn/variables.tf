@@ -54,8 +54,8 @@ variable "ipv6private_cidr_blocks" {
   default     = []
 }
 
-variable "is_oracle_gua_allocation_enabled" {
-  description = "(Optional) Specifies whether to skip Oracle allocated IPv6 GUA. By default, Oracle will allocate one GUA of /56 size for an IPv6 enabled VCN."
-  type        = bool
-  default     = false
-}
+# variable "is_oracle_gua_allocation_enabled" {
+#   description = "(Optional) Specifies whether to skip Oracle allocated IPv6 GUA. By default, Oracle will allocate one GUA of /56 size for an IPv6 enabled VCN."
+#   type        = bool
+#   default     = false
+# }
