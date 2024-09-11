@@ -5,10 +5,14 @@ resource "oci_core_drg_attachment" "this" {
   drg_route_table_id = var.drg_route_table_id
   freeform_tags      = var.freeform_tags
 
-  network_details {
-    id             = var.network_details.id
-    type           = var.network_details.type
-    route_table_id = var.network_details.route_table_id
-    vcn_route_type = var.network_details.vcn_route_type
+  dynamic "network_details" {
+    for_each = var.network_details[*]
+    iterator = nd
+    content {
+      id             = nd.value.id
+      type           = nd.value.type
+      route_table_id = nd.value.route_table_id
+      vcn_route_type = nd.value.vcn_route_type
+    }
   }
 }
