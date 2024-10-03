@@ -1,4 +1,4 @@
-data "oci_core_services" "this" {}
+data "oci_core_services" "these" {}
 
 resource "oci_core_service_gateway" "this" {
   compartment_id = var.compartment_id
@@ -9,6 +9,6 @@ resource "oci_core_service_gateway" "this" {
   route_table_id = var.route_table_id
 
   services {
-    service_id = data.oci_core_services.this.services[0].id
+    service_id = data.oci_core_services.these.services[0].id
   }
 }
