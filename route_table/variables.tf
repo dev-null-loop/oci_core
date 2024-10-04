@@ -1,23 +1,23 @@
 variable "compartment_id" {
-  description = "The OCID of the compartment to contain the route tables."
+  description = "(Required) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to contain the route table."
   type        = string
 }
 
 variable "vcn_id" {
-  description = "The OCID of the VCN the route tables are attached to."
+  description = "(Required) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the route table belongs to."
   type        = string
 }
 
 variable "display_name" {
-  description = "Name of the route tables."
+  description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
+  default     = null
 }
 
 variable "route_rules" {
   description = "(Optional) (Updatable) The collection of rules used for routing destination IPs to network devices."
   type = list(object({
     network_entity_name = string
-    cidr_block          = optional(string)
     description         = optional(string)
     destination         = string
     destination_type    = string
@@ -33,6 +33,7 @@ variable "route_rules" {
     can(regex("^(lpg_.*_(requestor|acceptor))$", i.network_entity_name)) if can(regex("^lpg_", i.network_entity_name))])
     error_message = "valid network_entity_names for local peering gateways are lpg_(.*)_(requestor|acceptor), where (.*) is the name of the object representing the lpg"
   }
+  default = []
 }
 
 variable "network_entity_ids" {
@@ -47,7 +48,7 @@ variable "defined_tags" {
 }
 
 variable "freeform_tags" {
-  description = "Free form tags applied to organize and list multiple route tables."
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
   default     = {}
 }

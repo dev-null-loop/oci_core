@@ -11,12 +11,13 @@ variable "vcn_id" {
 variable "display_name" {
   description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
+  default     = "sg"
 }
 
 variable "route_table_id" {
   description = "(Optional) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the route table the service gateway will use."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "defined_tags" {
