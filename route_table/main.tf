@@ -10,16 +10,16 @@ resource "oci_core_route_table" "this" {
     for_each = var.route_rules
     iterator = rr
     content {
-      network_entity_id = var.network_entity_ids[rr.value.network_entity_name]
-      description       = rr.value.description
+      description = rr.value.description
       destination = (
-	(rr.value.destination == "services" || rr.value.destination == "objectstorage") ?
+	can(regex("(services|objectstorage)", rr.value.destination)) ?
 	[for i in data.oci_core_services.these.services[*].cidr_block : i
 	  if can(regex("${rr.value.destination}", i))
 	][0] :
 	rr.value.destination
       )
-      destination_type = rr.value.destination_type
+      destination_type  = rr.value.destination_type
+      network_entity_id = var.network_entity_ids[rr.value.network_entity_name]
     }
   }
 }
