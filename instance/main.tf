@@ -8,7 +8,7 @@ data "cloudinit_config" "this" {
     content {
       content_type = "text/x-shellscript"
       filename     = basename(part.value.filename)
-      content      = templatefile("${part.value.filename}", merge(part.value.vars, {}))
+      content      = templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {}))
     }
   }
 }
