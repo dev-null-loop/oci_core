@@ -1,9 +1,9 @@
-data "oci_core_ipsec_connection_tunnels" "this" {
+data "oci_core_ipsec_connection_tunnels" "these" {
   ipsec_id = oci_core_ipsec.this.id
 }
 
 locals {
-  tunnels = data.oci_core_ipsec_connection_tunnels.this.ip_sec_connection_tunnels[*].id
+  tunnels = data.oci_core_ipsec_connection_tunnels.these.ip_sec_connection_tunnels[*].id
 }
 
 resource "oci_core_ipsec" "this" {
