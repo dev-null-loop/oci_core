@@ -14,8 +14,7 @@ resource "oci_core_route_table" "this" {
       destination = (
 	can(regex("(services|objectstorage)", rr.value.destination)) ?
 	[for i in data.oci_core_services.these.services[*].cidr_block : i
-	  if can(regex("${rr.value.destination}", i))
-	][0] :
+	if can(regex("${rr.value.destination}", i))][0] :
 	rr.value.destination
       )
       destination_type  = rr.value.destination_type
