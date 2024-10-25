@@ -54,8 +54,17 @@ variable "source_details" {
   description = "(Applicable when instance_type=instance_options)"
   type = object({
     source_type             = string
-    boot_volume_size_in_gbs = number
-    image_id                = string
+    boot_volume_id          = optional(string)
+    boot_volume_size_in_gbs = optional(number)
+    boot_volume_vpus_per_gb = optional(number)
+    image_id                = optional(string)
+    kms_key_id              = optional(string)
+    instance_source_image_filter_details = optional(object({
+      compartment_id           = optional(string)
+      defined_tags_filter      = optional(string)
+      operating_system         = optional(string)
+      operating_system_version = optional(string)
+    }))
   })
   default = null
 }
