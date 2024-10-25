@@ -36,32 +36,38 @@ resource "oci_core_instance_configuration" "this" {
       defined_tags         = var.launch_details.defined_tags
       display_name         = var.launch_details.display_name
       extended_metadata    = var.launch_details.extended_metadata
-      fault_domain         = format("FAULT-DOMAIN-%s", var.launch_details.fault_domain)
       freeform_tags        = var.launch_details.freeform_tags
-      create_vnic_details {
-	assign_public_ip = false
-      }
-      metadata = {
-	ssh_authorized_keys = ""
+      dynamic "create_vnic_details" {
+	for_each = var.launch_details.create_vnic_details[*]
+	iterator = cvd
+	content {
+	  assign_public_ip       = cvd.assign_public_ip
+	  display_name           = cvd.value.display_name
+	  skip_source_dest_check = cvd.value.skip_source_dest_check
+	}
       }
 
-      # dynamic "shape_config" {
-      #		for_each = length(regexall("(?i)(flex)", each.value.shape)) > 0 ? var.instance_configuration_params : {}
-      #		content {
-      #		  memory_in_gbs = each.value.instance_shape_config_memory_in_gbs
-      #		  ocpus         = each.value.instance_shape_config_ocpus
-      #		}
-      # }
+      #       # metadata = {
+      #       #		ssh_authorized_keys = ""
+      #       # }
+
+      #       # dynamic "shape_config" {
+      #       #		for_each = length(regexall("(?i)(flex)", each.value.shape)) > 0 ? var.instance_configuration_params : {}
+      #       #		content {
+      #       #		  memory_in_gbs = each.value.instance_shape_config_memory_in_gbs
+      #       #		  ocpus         = each.value.instance_shape_config_ocpus
+      #       #		}
+      #       # }
 
       source_details {
-	source_type             = var.source_details.source_type
-	boot_volume_id          = var.source_details.boot_volume_id
-	boot_volume_size_in_gbs = var.source_details.boot_volume_size_in_gbs
-	boot_volume_vpus_per_gb = var.source_details.boot_volume_vpus_per_gb
-	image_id                = var.source_details.image_id
-	kms_key_id              = var.source_details.kms_key_id
+	source_type             = var.launch_details.source_details.source_type
+	image_id                = var.launch_details.source_details.image_id
+	boot_volume_id          = var.launch_details.source_details.boot_volume_id
+	boot_volume_size_in_gbs = var.launch_details.source_details.boot_volume_size_in_gbs
+	boot_volume_vpus_per_gb = var.launch_details.source_details.boot_volume_vpus_per_gb
+	kms_key_id              = null # var.launch_details.source_details.kms_key_id
 	dynamic "instance_source_image_filter_details" {
-	  for_each = var.source_details.instance_source_image_filter_details[*]
+	  for_each = var.launch_details.source_details.instance_source_image_filter_details[*]
 	  iterator = iifd
 	  content {
 	    compartment_id           = iifd.value.compartment_id
@@ -72,6 +78,5 @@ resource "oci_core_instance_configuration" "this" {
 	}
       }
     }
-
   }
 }
