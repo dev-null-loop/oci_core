@@ -30,10 +30,10 @@ resource "oci_core_security_list" "this" {
 	content {
 	  max = tcp_options.value.max
 	  min = tcp_options.value.min
-	  source_port_range {
-	    max = tcp_options.value.source_port_range_max
-	    min = tcp_options.value.source_port_range_min
-	  }
+	  # source_port_range {
+	  #   max = tcp_options.value.source_port_range_max
+	  #   min = tcp_options.value.source_port_range_min
+	  # }
 	}
       }
       dynamic "udp_options" {
