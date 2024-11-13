@@ -1,5 +1,4 @@
 resource "oci_core_default_security_list" "this" {
-  count                      = 0
   manage_default_resource_id = var.default_security_list_id
 }
 
