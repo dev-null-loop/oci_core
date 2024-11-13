@@ -1,6 +1,5 @@
 variable "default_security_list_id" {
-  type    = string
-  default = null
+  type = string
 }
 
 variable "compartment_id" {
