@@ -11,21 +11,22 @@ resource "oci_core_security_list" "this" {
   freeform_tags  = var.freeform_tags
   dynamic "egress_security_rules" {
     for_each = var.egress_rules
+    iterator = esr
     content {
-      destination      = egress_rules.value.destination
-      protocol         = egress_rules.value.protocol
-      description      = egress_rules.value.description
-      destination_type = egress_rules.value.destination_type
-      stateless        = egress_rules.value.stateless
+      destination      = esr.value.destination
+      protocol         = esr.value.protocol
+      description      = esr.value.description
+      destination_type = esr.value.destination_type
+      stateless        = esr.value.stateless
       dynamic "icmp_options" {
-	for_each = egress_rules.value.icmp_options[*]
+	for_each = esr.value.icmp_options[*]
 	content {
 	  type = icmp_options.value.type
 	  code = icmp_options.value.code
 	}
       }
       dynamic "tcp_options" {
-	for_each = egress_rules.value.tcp_options[*]
+	for_each = esr.value.tcp_options[*]
 	content {
 	  max = tcp_options.value.max
 	  min = tcp_options.value.min
@@ -36,7 +37,7 @@ resource "oci_core_security_list" "this" {
 	}
       }
       dynamic "udp_options" {
-	for_each = egress_rules.value.udp_options[*]
+	for_each = esr.value.udp_options[*]
 	content {
 	  max = udp_options.value.max
 	  min = udp_options.value.min
@@ -48,7 +49,6 @@ resource "oci_core_security_list" "this" {
   dynamic "ingress_security_rules" {
     for_each = var.ingress_rules
     iterator = ingress_rules
-
     content {
       stateless   = ingress_rules.value.stateless
       protocol    = ingress_rules.value.protocol
