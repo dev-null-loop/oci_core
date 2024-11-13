@@ -1,4 +1,5 @@
 resource "oci_core_default_security_list" "this" {
+  count                      = 0
   manage_default_resource_id = var.default_security_list_id
 }
 
@@ -8,46 +9,42 @@ resource "oci_core_security_list" "this" {
   display_name   = var.display_name
   defined_tags   = var.defined_tags
   freeform_tags  = var.freeform_tags
-
   dynamic "egress_security_rules" {
     for_each = var.egress_rules
-    iterator = egress_rules
-
     content {
-      stateless        = egress_rules.value.stateless
-      protocol         = egress_rules.value.protocol
       destination      = egress_rules.value.destination
+      protocol         = egress_rules.value.protocol
+      description      = egress_rules.value.description
       destination_type = egress_rules.value.destination_type
-
-      dynamic "tcp_options" {
-        iterator = tcp_options
-        for_each = egress_rules.value.tcp_options[*]
-        content {
-          max = tcp_options.value.max
-          min = tcp_options.value.min
-        }
-      }
-
-      dynamic "udp_options" {
-        iterator = udp_options
-        for_each = egress_rules.value.udp_options[*]
-        content {
-          max = udp_options.value.max
-          min = udp_options.value.min
-        }
-      }
-
+      stateless        = egress_rules.value.stateless
       dynamic "icmp_options" {
-        iterator = icmp_options
-        for_each = egress_rules.value.icmp_options[*]
-        content {
-          type = icmp_options.value.type
-          code = icmp_options.value.code
-        }
+	for_each = egress_rules.value.icmp_options[*]
+	content {
+	  type = icmp_options.value.type
+	  code = icmp_options.value.code
+	}
       }
+      dynamic "tcp_options" {
+	for_each = egress_rules.value.tcp_options[*]
+	content {
+	  max = tcp_options.value.max
+	  min = tcp_options.value.min
+	  source_port_range {
+	    max = tcp_options.value.source_port_range_max
+	    min = tcp_options.value.source_port_range_min
+	  }
+	}
+      }
+      dynamic "udp_options" {
+	for_each = egress_rules.value.udp_options[*]
+	content {
+	  max = udp_options.value.max
+	  min = udp_options.value.min
+	}
+      }
+
     }
   }
-
   dynamic "ingress_security_rules" {
     for_each = var.ingress_rules
     iterator = ingress_rules
@@ -59,30 +56,30 @@ resource "oci_core_security_list" "this" {
       source_type = ingress_rules.value.source_type
 
       dynamic "tcp_options" {
-        iterator = tcp_options
-        for_each = ingress_rules.value.tcp_options[*]
-        content {
-          max = tcp_options.value.max
-          min = tcp_options.value.min
-        }
+	iterator = tcp_options
+	for_each = ingress_rules.value.tcp_options[*]
+	content {
+	  max = tcp_options.value.max
+	  min = tcp_options.value.min
+	}
       }
 
       dynamic "udp_options" {
-        iterator = udp_options
-        for_each = ingress_rules.value.udp_options[*]
-        content {
-          max = udp_options.value.max
-          min = udp_options.value.min
-        }
+	iterator = udp_options
+	for_each = ingress_rules.value.udp_options[*]
+	content {
+	  max = udp_options.value.max
+	  min = udp_options.value.min
+	}
       }
 
       dynamic "icmp_options" {
-        iterator = icmp_options
-        for_each = ingress_rules.value.icmp_options[*]
-        content {
-          type = icmp_options.value.type
-          code = icmp_options.value.code
-        }
+	iterator = icmp_options
+	for_each = ingress_rules.value.icmp_options[*]
+	content {
+	  type = icmp_options.value.type
+	  code = icmp_options.value.code
+	}
       }
     }
   }
