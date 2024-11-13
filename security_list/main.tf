@@ -29,10 +29,14 @@ resource "oci_core_security_list" "this" {
 	content {
 	  max = tcp_options.value.max
 	  min = tcp_options.value.min
-	  # source_port_range {
-	  #   max = tcp_options.value.source_port_range_max
-	  #   min = tcp_options.value.source_port_range_min
-	  # }
+	  dynamic "source_port_range" {
+	    for_each = esr.value.tcp_options.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.source_port_range_max
+	      min = spr.value.source_port_range_min
+	    }
+	  }
 	}
       }
       dynamic "udp_options" {
@@ -40,43 +44,61 @@ resource "oci_core_security_list" "this" {
 	content {
 	  max = udp_options.value.max
 	  min = udp_options.value.min
+	  dynamic "source_port_range" {
+	    for_each = esr.value.udp_options.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.source_port_range_max
+	      min = spr.value.source_port_range_min
+	    }
+	  }
 	}
       }
     }
   }
   dynamic "ingress_security_rules" {
     for_each = var.ingress_rules
-    iterator = ingress_rules
+    iterator = isr
     content {
-      stateless   = ingress_rules.value.stateless
-      protocol    = ingress_rules.value.protocol
-      source      = ingress_rules.value.source
-      source_type = ingress_rules.value.source_type
-
-      dynamic "tcp_options" {
-	iterator = tcp_options
-	for_each = ingress_rules.value.tcp_options[*]
-	content {
-	  max = tcp_options.value.max
-	  min = tcp_options.value.min
-	}
-      }
-
-      dynamic "udp_options" {
-	iterator = udp_options
-	for_each = ingress_rules.value.udp_options[*]
-	content {
-	  max = udp_options.value.max
-	  min = udp_options.value.min
-	}
-      }
-
+      stateless   = isr.value.stateless
+      protocol    = isr.value.protocol
+      source      = isr.value.source
+      source_type = isr.value.source_type
       dynamic "icmp_options" {
-	iterator = icmp_options
-	for_each = ingress_rules.value.icmp_options[*]
+	for_each = isr.value.icmp_options[*]
 	content {
 	  type = icmp_options.value.type
 	  code = icmp_options.value.code
+	}
+      }
+      dynamic "tcp_options" {
+	for_each = isr.value.tcp_options[*]
+	content {
+	  max = tcp_options.value.max
+	  min = tcp_options.value.min
+	  dynamic "source_port_range" {
+	    for_each = isr.value.tcp_options.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.source_port_range_max
+	      min = spr.value.source_port_range_min
+	    }
+	  }
+	}
+      }
+      dynamic "udp_options" {
+	for_each = isr.value.udp_options[*]
+	content {
+	  max = udp_options.value.max
+	  min = udp_options.value.min
+	  dynamic "source_port_range" {
+	    for_each = isr.value.udp_options.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.source_port_range_max
+	      min = spr.value.source_port_range_min
+	    }
+	  }
 	}
       }
     }

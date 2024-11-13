@@ -28,10 +28,18 @@ variable "ingress_rules" {
     tcp_options = optional(object({
       min = number
       max = number
+      source_port_range = optional(object({
+	min = number
+	max = number
+      }))
     }))
     udp_options = optional(object({
       min = number
       max = number
+      source_port_range = optional(object({
+	min = number
+	max = number
+      }))
     }))
     icmp_options = optional(object({
       type = number
@@ -54,14 +62,20 @@ variable "egress_rules" {
       code = number
     }))
     tcp_options = optional(object({
-      min                   = number
-      max                   = number
-      source_port_range_max = optional(number)
-      source_port_range_min = optional(number)
+      min = number
+      max = number
+      source_port_range = optional(object({
+	min = number
+	max = number
+      }))
     }))
     udp_options = optional(object({
       min = number
       max = number
+      source_port_range = optional(object({
+	min = number
+	max = number
+      }))
     }))
   }))
   default = []
