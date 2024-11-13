@@ -44,10 +44,11 @@ variable "ingress_rules" {
 variable "egress_rules" {
   description = "(Optional) (Updatable) Rules for allowing egress IP packets."
   type = list(object({
-    protocol         = string
+    description      = optional(string)
     destination      = string
     destination_type = optional(string)
-    stateless        = string
+    protocol         = string
+    stateless        = optional(string)
     icmp_options = optional(object({
       type = number
       code = number

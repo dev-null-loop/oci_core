@@ -43,7 +43,6 @@ resource "oci_core_security_list" "this" {
 	  min = udp_options.value.min
 	}
       }
-
     }
   }
   dynamic "ingress_security_rules" {
