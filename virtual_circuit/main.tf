@@ -1,23 +1,8 @@
-data "oci_core_fast_connect_provider_services" "this" {
-  compartment_id = var.compartment_id
-}
-
 resource "oci_core_virtual_circuit" "this" {
-  compartment_id            = var.compartment_id
-  type                      = var.type
-  bandwidth_shape_name      = var.bandwidth_shape_name
-  bgp_admin_state           = var.bgp_admin_state
-  customer_asn              = var.customer_asn
-  display_name              = var.display_name
-  ip_mtu                    = var.ip_mtu
-  is_bfd_enabled            = var.is_bfd_enabled
-  gateway_id                = var.gateway_id
-  provider_service_id       = var.provider_service_id
-  provider_service_key_name = var.provider_service_key_name
-  region                    = var.region
-  routing_policy            = var.routing_policy
-  is_transport_mode         = var.is_transport_mode
-
+  compartment_id       = var.compartment_id
+  type                 = var.type
+  bandwidth_shape_name = var.bandwidth_shape_name
+  bgp_admin_state      = var.bgp_admin_state
   dynamic "cross_connect_mappings" {
     for_each = var.cross_connect_mappings != [] ? var.cross_connect_mappings : []
     iterator = ccm
@@ -31,11 +16,22 @@ resource "oci_core_virtual_circuit" "this" {
       vlan                                    = ccm.value.vlan
     }
   }
-
+  customer_asn              = var.customer_asn
+  defined_tags              = var.defined_tags
+  display_name              = var.display_name
+  freeform_tags             = var.freeform_tags
+  ip_mtu                    = var.ip_mtu
+  is_bfd_enabled            = var.is_bfd_enabled
+  is_transport_mode         = var.is_transport_mode
+  gateway_id                = var.gateway_id
+  provider_service_id       = var.provider_service_id
+  provider_service_key_name = var.provider_service_key_name
   dynamic "public_prefixes" {
     for_each = var.public_prefixes[*]
     content {
       cidr_block = public_prefixes.value.cidr_block
     }
   }
+  region         = var.region
+  routing_policy = var.routing_policy
 }
