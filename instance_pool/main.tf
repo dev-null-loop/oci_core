@@ -1,9 +1,9 @@
-data "oci_identity_availability_domains" "this" {
+data "oci_identity_availability_domains" "these" {
   compartment_id = var.compartment_id
 }
 
 locals {
-  ads = data.oci_identity_availability_domains.this.availability_domains
+  ads = data.oci_identity_availability_domains.these.availability_domains
 }
 
 resource "oci_core_instance_pool" "this" {

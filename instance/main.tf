@@ -23,22 +23,13 @@ locals {
 }
 
 resource "oci_core_instance" "this" {
-  compartment_id                      = var.compartment_id
-  availability_domain                 = local.ads[var.availability_domain - 1].name
-  fault_domain                        = format("FAULT-DOMAIN-%s", var.fault_domain)
-  shape                               = var.shape
-  display_name                        = var.display_name
-  preserve_boot_volume                = var.preserve_boot_volume
-  freeform_tags                       = var.freeform_tags
-  is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
-  state                               = var.state
-  instance_configuration_id           = var.instance_configuration_id
-
+  availability_domain = local.ads[var.availability_domain - 1].name
+  compartment_id      = var.compartment_id
+  shape               = var.shape
   agent_config {
     are_all_plugins_disabled = var.are_all_plugins_disabled
     is_management_disabled   = var.is_management_disabled
     is_monitoring_disabled   = var.is_monitoring_disabled
-
     dynamic "plugins_config" {
       for_each = var.enabled_plugins != null ? var.enabled_plugins : []
       content {
@@ -47,14 +38,21 @@ resource "oci_core_instance" "this" {
       }
     }
   }
-
   create_vnic_details {
     assign_ipv6ip    = var.assign_ipv6ip
     assign_public_ip = var.assign_public_ip
     subnet_id        = var.subnet_id
     nsg_ids          = var.nsg_ids
   }
-
+  display_name                        = var.display_name
+  fault_domain                        = format("FAULT-DOMAIN-%s", var.fault_domain)
+  freeform_tags                       = var.freeform_tags
+  instance_configuration_id           = var.instance_configuration_id
+  is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_keys != null ? join("", [for i in var.ssh_public_keys : file(i)]) : null
+    user_data           = join("", [for k, v in local.cloudinit_files : data.cloudinit_config.this[k].rendered])
+  }
   dynamic "shape_config" {
     for_each = length(regexall("(?i)(flex)", var.shape)) > 0 ? [1] : []
     content {
@@ -70,7 +68,6 @@ resource "oci_core_instance" "this" {
       vcpus                         = var.shape_config.vcpus
     }
   }
-
   source_details {
     source_id               = var.source_id
     source_type             = var.source_type
@@ -78,9 +75,6 @@ resource "oci_core_instance" "this" {
     boot_volume_vpus_per_gb = var.boot_volume_vpus_per_gb
     kms_key_id              = var.kms_key_id
   }
-
-  metadata = {
-    ssh_authorized_keys = var.ssh_public_keys != null ? join("", [for i in var.ssh_public_keys : file(i)]) : null
-    user_data           = join("", [for k, v in local.cloudinit_files : data.cloudinit_config.this[k].rendered])
-  }
+  preserve_boot_volume = var.preserve_boot_volume
+  state                = var.state
 }
