@@ -140,6 +140,12 @@ variable "assign_public_ip" {
   default = false
 }
 
+variable "skip_source_dest_check" {
+  description = "(Optional) (Updatable) Whether the source/destination check is disabled on the VNIC. Defaults to `false`, which means the check is performed. For information about why you would skip the source/destination check, see [Using a Private IP as a Route Target](https://docs.cloud.oracle.com/iaas/Content/Network/Tasks/managingroutetables.htm#privateip)."
+  type        = bool
+  default     = false
+}
+
 variable "nsg_ids" {
   type    = list(string)
   default = []

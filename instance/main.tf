@@ -39,10 +39,11 @@ resource "oci_core_instance" "this" {
     }
   }
   create_vnic_details {
-    assign_ipv6ip    = var.assign_ipv6ip
-    assign_public_ip = var.assign_public_ip
-    subnet_id        = var.subnet_id
-    nsg_ids          = var.nsg_ids
+    assign_ipv6ip          = var.assign_ipv6ip
+    assign_public_ip       = var.assign_public_ip
+    skip_source_dest_check = var.skip_source_dest_check
+    subnet_id              = var.subnet_id
+    nsg_ids                = var.nsg_ids
   }
   display_name                        = var.display_name
   fault_domain                        = format("FAULT-DOMAIN-%s", var.fault_domain)
