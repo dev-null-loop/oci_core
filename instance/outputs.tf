@@ -17,3 +17,7 @@ output "public_ip" {
   description = "The public IP address of instance VNIC (if enabled)."
   value       = oci_core_instance.this.public_ip
 }
+
+output "vnic_id" {
+  value = data.oci_core_vnic_attachments.these.vnic_attachments[0].vnic_id
+}

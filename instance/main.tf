@@ -1,3 +1,9 @@
+data "oci_core_vnic_attachments" "these" {
+  compartment_id      = var.compartment_id
+  availability_domain = local.ads[var.availability_domain - 1].name
+  instance_id         = oci_core_instance.this.id
+}
+
 data "cloudinit_config" "this" {
   for_each      = local.cloudinit_files
   gzip          = false
