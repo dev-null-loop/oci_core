@@ -203,3 +203,8 @@ variable "assign_ipv6ip" {
   type        = bool
   default     = false
 }
+
+variable "private_ip" {
+  type    = string
+  default = null
+}

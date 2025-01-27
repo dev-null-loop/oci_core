@@ -46,6 +46,7 @@ resource "oci_core_instance" "this" {
   }
   create_vnic_details {
     assign_ipv6ip          = var.assign_ipv6ip
+    private_ip             = var.private_ip
     assign_public_ip       = var.assign_public_ip
     skip_source_dest_check = var.skip_source_dest_check
     subnet_id              = var.subnet_id
