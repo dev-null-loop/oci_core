@@ -4,6 +4,14 @@ data "oci_core_vnic_attachments" "these" {
   instance_id         = oci_core_instance.this.id
 }
 
+data "oci_core_private_ips" "these" {
+  vnic_id = data.oci_core_vnic_attachments.these.vnic_attachments[0].vnic_id
+  filter {
+    name   = "is_primary"
+    values = [true]
+  }
+}
+
 data "cloudinit_config" "this" {
   for_each      = local.cloudinit_files
   gzip          = false
