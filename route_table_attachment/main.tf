@@ -1,4 +1,4 @@
 resource "oci_core_route_table_attachment" "this" {
-  subnet_id      = oci_core_subnet.test_subnet.id
-  route_table_id = oci_core_route_table.test_route_table.id
+  subnet_id      = var.subnet_id
+  route_table_id = var.route_table_id
 }
