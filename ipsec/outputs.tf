@@ -19,3 +19,13 @@ output "tunnels" {
     "${oci_core_ipsec_connection_tunnel_management.that.display_name}" = oci_core_ipsec_connection_tunnel_management.that.id
   }
 }
+
+output "tunnel_this_vpn_ip" {
+  description = "This tunnel's Oracle ID (OCID)."
+  value       = oci_core_ipsec_connection_tunnel_management.this.vpn_ip
+}
+
+output "tunnel_that_vpn_ip" {
+  description = "That tunnel's Oracle ID (OCID)."
+  value       = oci_core_ipsec_connection_tunnel_management.that.vpn_ip
+}
