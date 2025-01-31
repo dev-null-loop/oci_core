@@ -22,3 +22,8 @@ output "display_name" {
   description = "A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   value       = oci_core_vcn.this.display_name
 }
+
+output "dns_resolver_id" {
+  description = "The OCID of the DNS resolver in the association. We won't have the DNS resolver id as soon as vcn is created, we will create it asynchronously. It would be null until it is actually created."
+  value       = data.oci_core_vcn_dns_resolver_association.this.dns_resolver_id
+}
