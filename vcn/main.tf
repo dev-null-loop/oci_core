@@ -1,5 +1,13 @@
+resource "time_sleep" "this" {
+  create_duration = "5s"
+  depends_on      = [oci_core_vcn.this]
+}
+
 data "oci_core_vcn_dns_resolver_association" "this" {
   vcn_id = oci_core_vcn.this.id
+  depends_on = [
+    time_sleep.this
+  ]
 }
 
 resource "oci_core_vcn" "this" {
