@@ -33,19 +33,18 @@ data "oci_identity_availability_domains" "these" {
 
 locals {
   ads             = data.oci_identity_availability_domains.these.availability_domains
-  cloudinit_files = var.cloud_init != null ? { for k, v in var.cloud_init : k => v } : {}
+  cloudinit_files = try({ for k, v in var.cloud_init : k => v }, {})
 }
 
 resource "oci_core_instance" "this" {
   availability_domain = local.ads[var.availability_domain - 1].name
   compartment_id      = var.compartment_id
-  shape               = var.shape
   agent_config {
     are_all_plugins_disabled = var.are_all_plugins_disabled
     is_management_disabled   = var.is_management_disabled
     is_monitoring_disabled   = var.is_monitoring_disabled
     dynamic "plugins_config" {
-      for_each = var.enabled_plugins != null ? var.enabled_plugins : []
+      for_each = try(var.enabled_plugins, null)
       content {
 	desired_state = "ENABLED"
 	name          = plugins_config.value
@@ -66,11 +65,12 @@ resource "oci_core_instance" "this" {
   instance_configuration_id           = var.instance_configuration_id
   is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
   metadata = {
-    ssh_authorized_keys = var.ssh_public_keys != null ? join("", [for i in var.ssh_public_keys : file(i)]) : null
+    ssh_authorized_keys = try(join("", [for i in var.ssh_public_keys : file(i)]), null)
     user_data           = join("", [for k, v in local.cloudinit_files : data.cloudinit_config.this[k].rendered])
   }
+  shape = var.shape
   dynamic "shape_config" {
-    for_each = length(regexall("(?i)(flex)", var.shape)) > 0 ? [1] : []
+    for_each = var.shape_config[*]
     content {
       baseline_ocpu_utilization     = var.shape_config.baseline_ocpu_utilization
       gpus                          = var.shape_config.gpus

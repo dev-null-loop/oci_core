@@ -169,7 +169,10 @@ variable "shape_config" {
     ocpus                         = optional(number)
     vcpus                         = optional(number)
   })
-  default = {}
+  default = {
+    ocpus         = 2
+    memory_in_gbs = 2
+  }
 }
 
 variable "ssh_public_keys" {
