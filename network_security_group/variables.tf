@@ -29,21 +29,21 @@ variable "rules" {
     source_type = string
     stateless   = string
     tcp_options = optional(object({
-      destination_ports = optional(object({
+      destination_port_range = optional(object({
 	min = number
 	max = number
       }))
-      source_ports = optional(object({
+      source_port_range = optional(object({
 	min = number
 	max = number
       }))
     }))
     udp_options = optional(object({
-      destination_ports = optional(object({
+      destination_port_range = optional(object({
 	min = number
 	max = number
       }))
-      source_ports = optional(object({
+      source_port_range = optional(object({
 	min = number
 	max = number
       }))
