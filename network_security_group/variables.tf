@@ -17,40 +17,37 @@ variable "rules" {
   description = "nsg parameters: protocol, stateless, direction, source, source type, destination, destination type, tcp options, udp options "
   type = map(object({
     protocol         = string
-    stateless        = string
     direction        = string
-    source           = string
-    source_type      = string
     destination      = optional(string)
     destination_type = optional(string)
+    icmp_options = optional(object({
+      type = optional(string)
+      code = optional(number)
+    }))
+    source      = string
+    source_type = string
+    stateless   = string
+    tcp_options = optional(object({
+      destination_ports = optional(object({
+	min = number
+	max = number
+      }))
+      source_ports = optional(object({
+	min = number
+	max = number
+      }))
+    }))
+    udp_options = optional(object({
+      destination_ports = optional(object({
+	min = number
+	max = number
+      }))
+      source_ports = optional(object({
+	min = number
+	max = number
+      }))
+    }))
   }))
-}
-
-variable "tcp_options" {
-  type = object({
-    destination_ports = optional(object({
-      min = number
-      max = number
-    }))
-    source_ports = optional(object({
-      min = number
-      max = number
-    }))
-  })
-  default = null
-}
-
-variable "udp_options" {
-  type = object({
-    destination_ports = optional(object({
-      min = number
-      max = number
-    }))
-    source_ports = optional(object({
-      min = number
-      max = number
-    }))
-  })
   default = null
 }
 

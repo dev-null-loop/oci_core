@@ -8,19 +8,9 @@ resource "oci_core_network_security_group" "this" {
 resource "oci_core_network_security_group_security_rule" "this" {
   for_each                  = var.rules
   network_security_group_id = oci_core_network_security_group.this.id
-  protocol                  = each.value.protocol
-  stateless                 = each.value.stateless
   direction                 = each.value.direction
-
-  source = (
-    each.value.direction == "INGRESS" ?
-    each.value.source_type == "NETWORK_SECURITY_GROUP" ?
-    oci_core_network_security_group.this[each.value.source].id :
-    each.value.source :
-    null
-  )
-  source_type = each.value.direction == "INGRESS" ? each.value.source_type : null
-
+  protocol                  = each.value.protocol
+  description               = each.value.description
   destination = (
     each.value.direction == "EGRESS" ?
     each.value.destination_type == "NETWORK_SECURITY_GROUP" ?
@@ -29,7 +19,66 @@ resource "oci_core_network_security_group_security_rule" "this" {
     null
   )
   destination_type = each.value.direction == "EGRESS" ? each.value.destination_type : null
+  dynamic "icmp_options" {
+    for_each = each.value.icmp_options[*]
+    iterator = io
+    content {
+      type = io.value.type
+      code = io.value.code
+    }
+  }
+  source = (
+    each.value.direction == "INGRESS" ?
+    each.value.source_type == "NETWORK_SECURITY_GROUP" ?
+    oci_core_network_security_group.this[each.value.source].id :
+    each.value.source :
+    null
+  )
+  source_type = each.value.direction == "INGRESS" ? each.value.source_type : null
+  stateless   = each.value.stateless
+  dynamic "tcp_options" {
+    for_each = each.value.tcp_options[*]
+    content {
+      dynamic "destination_port_range" {
+	for_each = tcp_options.value.destination_port_range[*]
+	iterator = dpr
+	content {
+	  min = dpr.value.min
+	  max = dpr.value.max
+	}
+      }
+      dynamic "source_port_range" {
+	for_each = tcp_options.value.source_port_range[*]
+	iterator = spr
+	content {
+	  min = spr.value.min
+	  max = spr.value.max
+	}
+      }
+    }
+  }
+  dynamic "udp_options" {
+    for_each = each.value.udp_options[*]
+    content {
+      dynamic "destination_port_range" {
+	for_each = udp_options.value.destination_port_range[*]
+	iterator = dpr
+	content {
+	  min = dpr.value.min
+	  max = dpr.value.max
+	}
+      }
 
+      dynamic "source_port_range" {
+	for_each = udp_options.value.source_port_range[*]
+	iterator = spr
+	content {
+	  min = spr.value.min
+	  max = spr.value.max
+	}
+      }
+    }
+  }
   # source = (
   #   each.value.direction == "INGRESS" ?
   #   each.value.source_type == "CIDR_BLOCK" ?
@@ -47,50 +96,4 @@ resource "oci_core_network_security_group_security_rule" "this" {
   #   null
   # )
   # destination_type = each.value.direction == "EGRESS" ? each.value.destination_type : null
-
-  dynamic "tcp_options" {
-    for_each = var.tcp_options[*]
-    content {
-      dynamic "destination_port_range" {
-	for_each = tcp_options.value.destination_ports[*]
-	iterator = dpr
-	content {
-	  min = dpr.value.min
-	  max = dpr.value.max
-	}
-      }
-
-      dynamic "source_port_range" {
-	for_each = tcp_options.value.source_ports[*]
-	iterator = spr
-	content {
-	  min = spr.value.min
-	  max = spr.value.max
-	}
-      }
-    }
-  }
-
-  dynamic "udp_options" {
-    for_each = var.udp_options[*]
-    content {
-      dynamic "destination_port_range" {
-	for_each = udp_options.value.destination_ports[*]
-	iterator = dpr
-	content {
-	  min = dpr.value.min
-	  max = dpr.value.max
-	}
-      }
-
-      dynamic "source_port_range" {
-	for_each = udp_options.value.source_ports[*]
-	iterator = spr
-	content {
-	  min = spr.value.min
-	  max = spr.value.max
-	}
-      }
-    }
-  }
 }
