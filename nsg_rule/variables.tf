@@ -9,7 +9,7 @@ variable "network_security_group_ids" {
 
 variable "rules" {
   description = "(Optional) An array of security rules to add to the NSG. You can add up to 25 rules in a single `AddNetworkSecurityGroupSecurityRules` operation. Adding more than 25 rules requires multiple operations. "
-  type = map(object({
+  type = object({
     direction        = string
     protocol         = string
     description      = optional(string)
@@ -42,6 +42,6 @@ variable "rules" {
 	max = number
       }))
     }))
-  }))
+  })
   default = null
 }
