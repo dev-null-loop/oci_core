@@ -6,7 +6,7 @@ resource "oci_core_network_security_group" "this" {
 }
 
 resource "oci_core_network_security_group_security_rule" "this" {
-  for_each                  = var.rules_params
+  for_each                  = var.rules
   network_security_group_id = oci_core_network_security_group.this.id
   protocol                  = each.value.protocol
   stateless                 = each.value.stateless
@@ -52,21 +52,21 @@ resource "oci_core_network_security_group_security_rule" "this" {
     for_each = var.tcp_options[*]
     content {
       dynamic "destination_port_range" {
-        for_each = tcp_options.value.destination_ports[*]
-        iterator = dpr
-        content {
-          min = dpr.value.min
-          max = dpr.value.max
-        }
+	for_each = tcp_options.value.destination_ports[*]
+	iterator = dpr
+	content {
+	  min = dpr.value.min
+	  max = dpr.value.max
+	}
       }
 
       dynamic "source_port_range" {
-        for_each = tcp_options.value.source_ports[*]
-        iterator = spr
-        content {
-          min = spr.value.min
-          max = spr.value.max
-        }
+	for_each = tcp_options.value.source_ports[*]
+	iterator = spr
+	content {
+	  min = spr.value.min
+	  max = spr.value.max
+	}
       }
     }
   }
@@ -75,21 +75,21 @@ resource "oci_core_network_security_group_security_rule" "this" {
     for_each = var.udp_options[*]
     content {
       dynamic "destination_port_range" {
-        for_each = udp_options.value.destination_ports[*]
-        iterator = dpr
-        content {
-          min = dpr.value.min
-          max = dpr.value.max
-        }
+	for_each = udp_options.value.destination_ports[*]
+	iterator = dpr
+	content {
+	  min = dpr.value.min
+	  max = dpr.value.max
+	}
       }
 
       dynamic "source_port_range" {
-        for_each = udp_options.value.source_ports[*]
-        iterator = spr
-        content {
-          min = spr.value.min
-          max = spr.value.max
-        }
+	for_each = udp_options.value.source_ports[*]
+	iterator = spr
+	content {
+	  min = spr.value.min
+	  max = spr.value.max
+	}
       }
     }
   }

@@ -13,7 +13,7 @@ variable "display_name" {
   type        = string
 }
 
-variable "rules_params" {
+variable "rules" {
   description = "nsg parameters: protocol, stateless, direction, source, source type, destination, destination type, tcp options, udp options "
   type = map(object({
     protocol         = string
