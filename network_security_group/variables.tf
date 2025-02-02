@@ -21,7 +21,7 @@ variable "rules" {
     direction        = string
     source           = string
     source_type      = string
-    destination      = string
+    destination      = optional(string)
     destination_type = optional(string)
   }))
 }
