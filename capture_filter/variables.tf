@@ -56,6 +56,7 @@ variable "flow_log_capture_filter_rules" {
       }))
     }))
   }))
+  default = null
 }
 
 variable "freeform_tags" {
@@ -97,4 +98,5 @@ variable "vtap_capture_filter_rules" {
       }))
     }))
   }))
+  default = null
 }
