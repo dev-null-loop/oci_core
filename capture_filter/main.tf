@@ -4,13 +4,13 @@ resource "oci_core_capture_filter" "this" {
   defined_tags   = var.defined_tags
   display_name   = var.display_name
   dynamic "flow_log_capture_filter_rules" {
-    for_each = var.flow_log_capture_filter_rules != null ? [1] : []
+    for_each = var.flow_log_capture_filter_rules != [] ? var.flow_log_capture_filter_rules : []
     iterator = cfr
     content {
       destination_cidr = cfr.value.destination_cidr
       flow_log_type    = cfr.value.flow_log_type
       dynamic "icmp_options" {
-	for_each = cf.value.icmp_options[*]
+	for_each = cfr.value.icmp_options[*]
 	iterator = io
 	content {
 	  type = io.value.type
@@ -50,19 +50,19 @@ resource "oci_core_capture_filter" "this" {
 	iterator = uo
 	content {
 	  dynamic "destination_port_range" {
-	    for_each = uo.value.destination_port_range
+	    for_each = uo.value.destination_port_range[*]
 	    iterator = dpr
 	    content {
 	      max = dpr.value.max
 	      min = dpr.value.min
 	    }
-	    dynamic "source_port_range" {
-	      for_each = uo.value.source_port_range
-	      iterator = spr
-	      content {
-		max = spr.value.max
-		min = spr.value.min
-	      }
+	  }
+	  dynamic "source_port_range" {
+	    for_each = uo.value.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.max
+	      min = spr.value.min
 	    }
 	  }
 	}
@@ -71,7 +71,7 @@ resource "oci_core_capture_filter" "this" {
   }
   freeform_tags = var.freeform_tags
   dynamic "vtap_capture_filter_rules" {
-    for_each = var.vtap_capture_filter_rules != null ? [1] : []
+    for_each = var.vtap_capture_filter_rules != null ? var.vtap_capture_filter_rules : []
     iterator = cfr
     content {
       traffic_direction = cfr.value.traffic_direction
@@ -120,13 +120,13 @@ resource "oci_core_capture_filter" "this" {
 	      max = dpr.value.max
 	      min = dpr.value.min
 	    }
-	    dynamic "source_port_range" {
-	      for_each = uo.value.source_port_range
-	      iterator = spr
-	      content {
-		max = spr.value.max
-		min = spr.value.min
-	      }
+	  }
+	  dynamic "source_port_range" {
+	    for_each = uo.value.source_port_range[*]
+	    iterator = spr
+	    content {
+	      max = spr.value.max
+	      min = spr.value.min
 	    }
 	  }
 	}
