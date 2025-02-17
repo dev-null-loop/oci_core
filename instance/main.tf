@@ -17,11 +17,11 @@ data "oci_identity_availability_domains" "these" {
 }
 
 data "cloudinit_config" "this" {
-  for_each      = local.cloudinit_files
+  for_each      = local.cloud_init_files
   gzip          = false
   base64_encode = false
   dynamic "part" {
-    for_each = local.cloudinit_files
+    for_each = local.cloud_init_files
     content {
       content_type = "text/x-shellscript"
       filename     = basename(part.value.filename)
@@ -31,8 +31,8 @@ data "cloudinit_config" "this" {
 }
 
 locals {
-  ads             = data.oci_identity_availability_domains.these.availability_domains
-  cloudinit_files = try({ for k, v in var.cloud_init : k => v }, {})
+  ads              = data.oci_identity_availability_domains.these.availability_domains
+  cloud_init_files = try({ for k, v in var.cloud_init : k => v }, {})
 }
 
 resource "oci_core_instance" "this" {
