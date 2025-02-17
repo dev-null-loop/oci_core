@@ -12,11 +12,14 @@ data "oci_core_private_ips" "these" {
   }
 }
 
+data "oci_identity_availability_domains" "these" {
+  compartment_id = var.compartment_id
+}
+
 data "cloudinit_config" "this" {
   for_each      = local.cloudinit_files
   gzip          = false
-  base64_encode = true
-
+  base64_encode = false
   dynamic "part" {
     for_each = local.cloudinit_files
     content {
@@ -25,10 +28,6 @@ data "cloudinit_config" "this" {
       content      = templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {}))
     }
   }
-}
-
-data "oci_identity_availability_domains" "these" {
-  compartment_id = var.compartment_id
 }
 
 locals {
@@ -66,7 +65,7 @@ resource "oci_core_instance" "this" {
   is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
   metadata = {
     ssh_authorized_keys = try(join("", [for i in var.ssh_public_keys : file(i)]), null)
-    user_data           = join("", [for k, v in local.cloudinit_files : data.cloudinit_config.this[k].rendered])
+    user_data           = base64encode(join("", [for k, v in local.cloud_init_files : data.cloudinit_config.this[k].rendered]))
   }
   shape = var.shape
   dynamic "shape_config" {
