@@ -27,3 +27,8 @@ output "dns_resolver_id" {
   description = "The OCID of the DNS resolver in the association. We won't have the DNS resolver id as soon as vcn is created, we will create it asynchronously. It would be null until it is actually created."
   value       = data.oci_core_vcn_dns_resolver_association.this.dns_resolver_id
 }
+
+output "cidr_blocks" {
+  description = "The list of IPv4 CIDR blocks the VCN will use."
+  value       = oci_core_vcn.this.cidr_blocks
+}
