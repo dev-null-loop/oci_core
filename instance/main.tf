@@ -64,7 +64,8 @@ resource "oci_core_instance" "this" {
   instance_configuration_id           = var.instance_configuration_id
   is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
   metadata = {
-    ssh_authorized_keys = try(join("", [for i in var.ssh_public_keys : file(i)]), null)
+    #ssh_authorized_keys = try(join("", [for i in var.ssh_public_keys : file(i)]), null)
+    ssh_authorized_keys = var.ssh_public_keys
     user_data           = base64encode(join("", [for k, v in local.cloud_init_files : data.cloudinit_config.this[k].rendered]))
   }
   shape = var.shape
