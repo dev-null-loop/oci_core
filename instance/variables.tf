@@ -177,8 +177,8 @@ variable "shape_config" {
 
 variable "ssh_public_keys" {
   description = "List of SSH public key to connect to the instance."
-  type        = list(string)
-  default     = []
+  type        = string
+  default     = null
 }
 
 variable "cloud_init" {
