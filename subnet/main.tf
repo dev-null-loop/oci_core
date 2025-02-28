@@ -14,4 +14,8 @@ resource "oci_core_subnet" "this" {
   route_table_id             = var.route_table_id
   security_list_ids          = var.security_list_ids
   vcn_id                     = var.vcn_id
+  timeouts {
+    create = "1m"
+    delete = "1m"
+  }
 }
