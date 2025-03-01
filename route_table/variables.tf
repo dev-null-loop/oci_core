@@ -23,16 +23,16 @@ variable "route_rules" {
     destination_type    = string
   }))
 
-  validation {
-    condition     = alltrue([for i in var.route_rules : can(regex("^(ig|sg|lpg|drg|ng|pip)_", i.network_entity_name))])
-    error_message = "Error: A network_entity_name is prefixed with (ig|sg|lpg|drg|ng|pip)_(.*), where (.*) is the name of the object representing the network entity"
-  }
+  # validation {
+  #   condition     = alltrue([for i in var.route_rules : can(regex("^(ig|sg|lpg|drg|ng|pip)_", i.network_entity_name))])
+  #   error_message = "Error: A network_entity_name is prefixed with (ig|sg|lpg|drg|ng|pip)_(.*), where (.*) is the name of the object representing the network entity"
+  # }
 
-  validation {
-    condition = alltrue([for i in var.route_rules :
-    can(regex("^(lpg_.*_(requestor|acceptor))$", i.network_entity_name)) if can(regex("^lpg_", i.network_entity_name))])
-    error_message = "valid network_entity_names for local peering gateways are lpg_(.*)_(requestor|acceptor), where (.*) is the name of the object representing the lpg"
-  }
+  # validation {
+  #   condition = alltrue([for i in var.route_rules :
+  #   can(regex("^(lpg_.*_(requestor|acceptor))$", i.network_entity_name)) if can(regex("^lpg_", i.network_entity_name))])
+  #   error_message = "valid network_entity_names for local peering gateways are lpg_(.*)_(requestor|acceptor), where (.*) is the name of the object representing the lpg"
+  # }
   default = []
 }
 
