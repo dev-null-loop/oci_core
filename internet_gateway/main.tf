@@ -3,4 +3,8 @@ resource "oci_core_internet_gateway" "this" {
   vcn_id         = var.vcn_id
   display_name   = var.display_name
   freeform_tags  = var.freeform_tags
+  timeouts {
+    create = "1m"
+    delete = "1m"
+  }
 }
