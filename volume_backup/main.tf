@@ -5,9 +5,8 @@ resource "oci_core_volume_backup" "this" {
   freeform_tags = var.freeform_tags
   kms_key_id    = var.kms_key_id
   type          = var.type
-
   dynamic "source_details" {
-    for_each = var.source_details[*]
+    for_each = var.volume_id == null ? var.source_details : {}
     content {
       kms_key_id       = var.source_details.kms_key_id
       region           = var.source_details.region
