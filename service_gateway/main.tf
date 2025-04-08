@@ -1,4 +1,10 @@
-data "oci_core_services" "these" {}
+data "oci_core_services" "these" {
+  filter {
+    name   = "name"
+    values = ["All [A-Z][A-Z][A-Z] Services In Oracle Services Network"]
+    regex  = true
+  }
+}
 
 resource "oci_core_service_gateway" "this" {
   compartment_id = var.compartment_id
