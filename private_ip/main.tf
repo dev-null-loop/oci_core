@@ -4,7 +4,9 @@ resource "oci_core_private_ip" "this" {
   freeform_tags  = var.freeform_tags
   hostname_label = var.hostname_label
   ip_address     = var.ip_address
+  lifetime       = var.lifetime
   route_table_id = var.route_table_id
+  subnet_id      = var.subnet_id
   vlan_id        = var.vlan_id
   vnic_id        = var.vnic_id
 }

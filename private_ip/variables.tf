@@ -45,3 +45,15 @@ variable "vnic_id" {
   type        = string
   default     = null
 }
+
+variable "lifetime" {
+  description = "(Optional) (Updatable) Lifetime of the IP address. There are two types of IPv6 IPs: Ephemeral / Reserved"
+  type        = string
+  default     = null
+}
+
+variable "subnet_id" {
+  description = "(Optional) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet from which the private IP is to be drawn. The IP address, *if supplied*, must be valid for the given subnet."
+  type        = string
+  default     = null
+}
