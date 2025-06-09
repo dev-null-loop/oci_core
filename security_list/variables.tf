@@ -20,6 +20,7 @@ variable "display_name" {
 variable "ingress_rules" {
   description = "(Optional) (Updatable) Rules for allowing ingress IP packets."
   type = list(object({
+    description      = optional(string)
     stateless        = string
     protocol         = string
     source           = string

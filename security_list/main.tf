@@ -60,6 +60,7 @@ resource "oci_core_security_list" "this" {
     for_each = var.ingress_rules
     iterator = isr
     content {
+      description = isr.value.description
       stateless   = isr.value.stateless
       protocol    = isr.value.protocol
       source      = isr.value.source
