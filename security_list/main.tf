@@ -1,3 +1,5 @@
+data "oci_core_services" "these" {}
+
 resource "oci_core_default_security_list" "this" {
   manage_default_resource_id = var.default_security_list_id
 }
@@ -9,13 +11,18 @@ resource "oci_core_security_list" "this" {
   defined_tags   = var.defined_tags
   freeform_tags  = var.freeform_tags
   dynamic "egress_security_rules" {
-    for_each = var.egress_rules
+    for_each = coalesce(var.egress_rules, [])
     iterator = esr
     content {
-      destination      = esr.value.destination
-      protocol         = esr.value.protocol
-      description      = esr.value.description
+      description = esr.value.description
+      destination = (
+	can(regex("(services|objectstorage)", esr.value.destination)) ?
+	[for i in data.oci_core_services.these.services[*].cidr_block : i
+	if can(regex(esr.value.destination, i))][0] :
+	esr.value.destination
+      )
       destination_type = esr.value.destination_type
+      protocol         = esr.value.protocol
       stateless        = esr.value.stateless
       dynamic "icmp_options" {
 	for_each = esr.value.icmp_options[*]
@@ -57,7 +64,7 @@ resource "oci_core_security_list" "this" {
     }
   }
   dynamic "ingress_security_rules" {
-    for_each = var.ingress_rules
+    for_each = coalesce(var.ingress_rules, [])
     iterator = isr
     content {
       description = isr.value.description
