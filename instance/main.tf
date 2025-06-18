@@ -39,30 +39,52 @@ resource "oci_core_instance" "this" {
   availability_domain = local.ads[var.availability_domain - 1].name
   compartment_id      = var.compartment_id
   agent_config {
-    are_all_plugins_disabled = var.are_all_plugins_disabled
-    is_management_disabled   = var.is_management_disabled
-    is_monitoring_disabled   = var.is_monitoring_disabled
+    are_all_plugins_disabled = var.agent_config.are_all_plugins_disabled
+    is_management_disabled   = var.agent_config.is_management_disabled
+    is_monitoring_disabled   = var.agent_config.is_monitoring_disabled
     dynamic "plugins_config" {
-      for_each = try(var.enabled_plugins, null)
+      for_each = coalesce(var.agent_config.plugins_config, [])
       content {
 	desired_state = "ENABLED"
 	name          = plugins_config.value
       }
     }
   }
+  # availability_config {
+  #   is_live_migration_preferred = var.instance_availability_config_is_live_migration_preferred
+  #   recovery_action             = var.instance_availability_config_recovery_action
+  # }
+  # cluster_placement_group_id = oci_identity_group.test_group.id
+  # compute_cluster_id         = oci_core_compute_cluster.test_compute_cluster.id
+  # compute_host_group_id      = oci_core_compute_host_group.test_compute_host_group.id
   create_vnic_details {
-    assign_ipv6ip          = var.assign_ipv6ip
-    private_ip             = var.private_ip
-    assign_public_ip       = var.assign_public_ip
-    skip_source_dest_check = var.skip_source_dest_check
-    subnet_id              = var.subnet_id
+    assign_ipv6ip          = var.create_vnic_details.assign_ipv6ip
+    assign_public_ip       = var.create_vnic_details.assign_public_ip
     nsg_ids                = var.nsg_ids
+    private_ip             = var.private_ip
+    skip_source_dest_check = var.skip_source_dest_check
+    subnet_id              = var.create_vnic_details.subnet_id
   }
-  display_name                        = var.display_name
-  fault_domain                        = format("FAULT-DOMAIN-%s", var.fault_domain)
-  freeform_tags                       = var.freeform_tags
-  instance_configuration_id           = var.instance_configuration_id
+  # dedicated_vm_host_id                = oci_core_dedicated_vm_host.test_dedicated_vm_host.id
+  defined_tags              = var.defined_tags
+  display_name              = var.display_name
+  fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
+  freeform_tags             = var.freeform_tags
+  hostname_label            = var.hostname_label
+  instance_configuration_id = var.instance_configuration_id
+  # instance_options {
+  #	are_legacy_imds_endpoints_disabled = var.instance_instance_options_are_legacy_imds_endpoints_disabled
+  # }
+  # ipxe_script = var.instance_ipxe_script
   is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
+  # launch_options {
+  #   boot_volume_type                    = var.instance_launch_options_boot_volume_type
+  #   firmware                            = var.instance_launch_options_firmware
+  #   is_consistent_volume_naming_enabled = var.instance_launch_options_is_consistent_volume_naming_enabled
+  #   is_pv_encryption_in_transit_enabled = var.instance_launch_options_is_pv_encryption_in_transit_enabled
+  #   network_type                        = var.instance_launch_options_network_type
+  #   remote_data_volume_type             = var.instance_launch_options_remote_data_volume_type
+  # }
   metadata = {
     ssh_authorized_keys = var.ssh_public_keys
     user_data           = base64encode(join("", [for k, v in local.cloud_init_files : data.cloudinit_config.this[k].rendered]))
@@ -71,24 +93,25 @@ resource "oci_core_instance" "this" {
   dynamic "shape_config" {
     for_each = var.shape_config[*]
     content {
-      baseline_ocpu_utilization     = var.shape_config.baseline_ocpu_utilization
-      gpus                          = var.shape_config.gpus
-      local_disks                   = var.shape_config.local_disks
-      local_disks_total_size_in_gbs = var.shape_config.local_disks_total_size_in_gbs
-      max_vnic_attachments          = var.shape_config.max_vnic_attachments
-      memory_in_gbs                 = var.shape_config.memory_in_gbs
-      networking_bandwidth_in_gbps  = var.shape_config.networking_bandwidth_in_gbps
-      nvmes                         = var.shape_config.nvmes
-      ocpus                         = var.shape_config.ocpus
-      vcpus                         = var.shape_config.vcpus
+      baseline_ocpu_utilization = var.shape_config.baseline_ocpu_utilization
+      memory_in_gbs             = var.shape_config.memory_in_gbs
+      nvmes                     = var.shape_config.nvmes
+      ocpus                     = var.shape_config.ocpus
+      vcpus                     = var.shape_config.vcpus
     }
   }
   source_details {
-    source_id               = var.source_id
-    source_type             = var.source_type
-    boot_volume_size_in_gbs = var.boot_volume_size_in_gbs
-    boot_volume_vpus_per_gb = var.boot_volume_vpus_per_gb
-    kms_key_id              = var.kms_key_id
+    source_id               = var.source_details.source_id
+    source_type             = var.source_details.source_type
+    boot_volume_size_in_gbs = var.source_details.boot_volume_size_in_gbs
+    boot_volume_vpus_per_gb = var.source_details.boot_volume_vpus_per_gb
+    kms_key_id              = var.source_details.kms_key_id
+    # instance_source_image_filter_details {
+    #   compartment_id           = var.compartment_id
+    #   defined_tags_filter      = var.instance_source_details_instance_source_image_filter_details_defined_tags_filter
+    #   operating_system         = var.instance_source_details_instance_source_image_filter_details_operating_system
+    #   operating_system_version = var.instance_source_details_instance_source_image_filter_details_operating_system_version
+    # }
   }
   preserve_boot_volume = var.preserve_boot_volume
   state                = var.state
