@@ -60,9 +60,9 @@ resource "oci_core_instance" "this" {
   create_vnic_details {
     assign_ipv6ip          = var.create_vnic_details.assign_ipv6ip
     assign_public_ip       = var.create_vnic_details.assign_public_ip
-    nsg_ids                = var.nsg_ids
-    private_ip             = var.private_ip
-    skip_source_dest_check = var.skip_source_dest_check
+    nsg_ids                = var.create_vnic_details.nsg_ids
+    private_ip             = var.create_vnic_details.private_ip
+    skip_source_dest_check = var.create_vnic_details.skip_source_dest_check
     subnet_id              = var.create_vnic_details.subnet_id
   }
   # dedicated_vm_host_id                = oci_core_dedicated_vm_host.test_dedicated_vm_host.id
@@ -70,7 +70,6 @@ resource "oci_core_instance" "this" {
   display_name              = var.display_name
   fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
   freeform_tags             = var.freeform_tags
-  hostname_label            = var.hostname_label
   instance_configuration_id = var.instance_configuration_id
   # instance_options {
   #	are_legacy_imds_endpoints_disabled = var.instance_instance_options_are_legacy_imds_endpoints_disabled
