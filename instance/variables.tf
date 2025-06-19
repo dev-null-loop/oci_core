@@ -36,6 +36,12 @@ variable "create_vnic_details" {
   default = null
 }
 
+variable "dedicated_vm_host_id" {
+  description = "(Optional) (Updatable) The OCID of the dedicated virtual machine host to place the instance on."
+  type        = string
+  default     = null
+}
+
 variable "defined_tags" {
   description = " (Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)

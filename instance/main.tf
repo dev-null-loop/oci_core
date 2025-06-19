@@ -60,12 +60,16 @@ resource "oci_core_instance" "this" {
   create_vnic_details {
     assign_ipv6ip          = var.create_vnic_details.assign_ipv6ip
     assign_public_ip       = var.create_vnic_details.assign_public_ip
+    defined_tags           = var.create_vnic_details.defined_tags
+    display_name           = var.create_vnic_details.display_name
+    freeform_tags          = var.create_vnic_details.freeform_tags
+    hostname_label         = var.create_vnic_details.hostname_label
     nsg_ids                = var.create_vnic_details.nsg_ids
     private_ip             = var.create_vnic_details.private_ip
     skip_source_dest_check = var.create_vnic_details.skip_source_dest_check
     subnet_id              = var.create_vnic_details.subnet_id
   }
-  # dedicated_vm_host_id                = oci_core_dedicated_vm_host.test_dedicated_vm_host.id
+  dedicated_vm_host_id      = var.dedicated_vm_host_id
   defined_tags              = var.defined_tags
   display_name              = var.display_name
   fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
