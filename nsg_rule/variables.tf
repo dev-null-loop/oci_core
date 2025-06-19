@@ -19,7 +19,7 @@ variable "rules" {
       type = optional(string)
       code = optional(number)
     }))
-    source      = string
+    source      = optional(string)
     source_type = string
     stateless   = string
     tcp_options = optional(object({
