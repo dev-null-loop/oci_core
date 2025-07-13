@@ -1,19 +1,19 @@
 resource "oci_core_vnic_attachment" "this" {
   create_vnic_details {
-    assign_ipv6ip                            = var.vnic_attachment_create_vnic_details_assign_ipv6ip
-    assign_private_dns_record                = var.vnic_attachment_create_vnic_details_assign_private_dns_record
-    assign_public_ip                         = var.vnic_attachment_create_vnic_details_assign_public_ip
-    defined_tags                             = var.vnic_attachment_create_vnic_details_defined_tags
-    display_name                             = var.vnic_attachment_create_vnic_details_display_name
-    freeform_tags                            = var.vnic_attachment_create_vnic_details_freeform_tags
-    hostname_label                           = var.vnic_attachment_create_vnic_details_hostname_label
-    ipv6address_ipv6subnet_cidr_pair_details = var.vnic_attachment_create_vnic_details_ipv6address_ipv6subnet_cidr_pair_details
-    nsg_ids                                  = var.vnic_attachment_create_vnic_details_nsg_ids
-    private_ip                               = var.vnic_attachment_create_vnic_details_private_ip
-    security_attributes                      = var.vnic_attachment_create_vnic_details_security_attributes
-    skip_source_dest_check                   = var.vnic_attachment_create_vnic_details_skip_source_dest_check
-    subnet_id                                = oci_core_subnet.test_subnet.id
-    vlan_id                                  = oci_core_vlan.test_vlan.id
+    assign_ipv6ip                            = var.create_vnic_details.assign_ipv6ip
+    assign_private_dns_record                = var.create_vnic_details.assign_private_dns_record
+    assign_public_ip                         = var.create_vnic_details.assign_public_ip
+    defined_tags                             = var.create_vnic_details.defined_tags
+    display_name                             = var.create_vnic_details.display_name
+    freeform_tags                            = var.create_vnic_details.freeform_tags
+    hostname_label                           = var.create_vnic_details.hostname_label
+    ipv6address_ipv6subnet_cidr_pair_details = var.create_vnic_details.ipv6address_ipv6subnet_cidr_pair_details
+    nsg_ids                                  = var.create_vnic_details.nsg_ids
+    private_ip                               = var.create_vnic_details.private_ip
+    security_attributes                      = var.create_vnic_details.security_attributes
+    skip_source_dest_check                   = var.create_vnic_details.skip_source_dest_check
+    subnet_id                                = var.create_vnic_details.subnet_id
+    vlan_id                                  = var.create_vnic_details.vlan_id
   }
   instance_id  = var.instance_id
   display_name = var.display_name
