@@ -1,3 +1,8 @@
+variable "tenancy_id" {
+  description = "(Required) (Updatable) The OCID of the tenancy."
+  type        = string
+}
+
 variable "availability_domain" {
   description = "(Required) The availability domain of the instance."
   type        = number
@@ -87,6 +92,7 @@ variable "ssh_public_keys" {
 variable "cloud_init" {
   type = map(object({
     filename = optional(string)
+    content  = optional(string)
     vars     = optional(map(string))
   }))
   default = {}

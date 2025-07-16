@@ -13,7 +13,7 @@ data "oci_core_private_ips" "these" {
 }
 
 data "oci_identity_availability_domains" "these" {
-  compartment_id = var.compartment_id
+  compartment_id = var.tenancy_id
 }
 
 data "cloudinit_config" "this" {
@@ -25,7 +25,13 @@ data "cloudinit_config" "this" {
     content {
       content_type = "text/x-shellscript"
       filename     = basename(part.value.filename)
-      content      = templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {}))
+      content = (
+	fileexists("${path.root}/${part.value.filename}") ?
+	templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {})) :
+	part.value.content != null ?
+	templatestring(part.value.content, merge(part.value.vars, {})) :
+	null
+      )
     }
   }
 }
