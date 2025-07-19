@@ -17,13 +17,12 @@ data "oci_identity_availability_domains" "these" {
 }
 
 data "cloudinit_config" "this" {
-  for_each      = local.cloud_init_files
   gzip          = false
   base64_encode = false
   dynamic "part" {
     for_each = local.cloud_init_files
     content {
-      content_type = "text/x-shellscript"
+      content_type = coalesce(part.value.content_type, "text/x-shellscript") # [WARNING]: Unhandled unknown content-type (text/plain) userdata: 'b'apiVersion: v1'...'
       filename     = basename(part.value.filename)
       content = (
 	fileexists("${path.root}/${part.value.filename}") ?
@@ -38,7 +37,7 @@ data "cloudinit_config" "this" {
 
 locals {
   ads              = data.oci_identity_availability_domains.these.availability_domains
-  cloud_init_files = try({ for k, v in var.cloud_init : k => v }, {})
+  cloud_init_files = try({ for k, v in var.cloud_init : k => v }, null)
 }
 
 resource "oci_core_instance" "this" {
@@ -96,7 +95,7 @@ resource "oci_core_instance" "this" {
   # }
   metadata = {
     ssh_authorized_keys = var.ssh_public_keys
-    user_data           = base64encode(join("", [for k, v in local.cloud_init_files : data.cloudinit_config.this[k].rendered]))
+    user_data           = base64encode(data.cloudinit_config.this.rendered)
   }
   shape = var.shape
   dynamic "shape_config" {

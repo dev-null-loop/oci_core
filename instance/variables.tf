@@ -30,7 +30,7 @@ variable "create_vnic_details" {
     assign_ipv6ip          = optional(bool, false)
     assign_public_ip       = optional(bool, false)
     defined_tags           = optional(map(string), null)
-    display_name           = optional(string, "instance")
+    display_name           = optional(string)
     freeform_tags          = optional(map(string), {})
     hostname_label         = optional(string)
     nsg_ids                = optional(list(string), [])
