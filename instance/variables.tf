@@ -91,9 +91,10 @@ variable "ssh_public_keys" {
 
 variable "cloud_init" {
   type = map(object({
-    filename = optional(string)
-    content  = optional(string)
-    vars     = optional(map(string))
+    filename     = optional(string)
+    content      = optional(string)
+    content_type = optional(string)
+    vars         = optional(map(string))
   }))
   default = {}
 }
