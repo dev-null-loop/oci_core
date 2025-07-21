@@ -31,6 +31,7 @@ data "cloudinit_config" "this" {
 	templatestring(part.value.content, merge(part.value.vars, {})) :
 	null
       )
+      merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
     }
   }
 }
