@@ -21,7 +21,12 @@ variable "agent_config" {
     is_monitoring_disabled   = optional(bool, false)
     plugins_config           = optional(list(string), [])
   })
-  default = null
+  default = {
+    are_all_plugins_disabled = false
+    is_management_disabled   = false
+    is_monitoring_disabled   = false
+    plugins_config           = []
+  }
 }
 
 variable "create_vnic_details" {
