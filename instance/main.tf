@@ -20,7 +20,7 @@ data "cloudinit_config" "this" {
   gzip          = false
   base64_encode = false
   dynamic "part" {
-    for_each = local.cloud_init_files
+    for_each = try(local.cloud_init_files, {})
     content {
       content_type = coalesce(part.value.content_type, "text/x-shellscript") # [WARNING]: Unhandled unknown content-type (text/plain) userdata: 'b'apiVersion: v1'...'
       filename     = basename(part.value.filename)
