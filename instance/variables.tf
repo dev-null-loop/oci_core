@@ -129,7 +129,7 @@ variable "source_details" {
     source_id               = optional(string)
     source_name             = optional(string)
     source_type             = optional(string, "image")
-    boot_volume_size_in_gbs = optional(number)
+    boot_volume_size_in_gbs = optional(number, 50)
     boot_volume_vpus_per_gb = optional(number)
     kms_key_id              = optional(string)
   })
