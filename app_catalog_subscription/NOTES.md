@@ -1,0 +1,5 @@
+- [How to retrieve an OCI Marketplace image id using advanced functionality in the OCI CLI utility](https://foggykitchen.com/2020/05/19/how-to-retrieve-an-oci-marketplace-image-id-using-advanced-functionality-in-the-oci-cli-utility/)
+- `oci marketplace publisher list --all|jq '.data[].name' | sort`
+- `oci marketplace listing list --all *|jq '.data[]|select(.name | test("FreeBSD.*"))'`
+- `oci marketplace listing get --listing-id "125980175"`
+- `oci raw-request --http-method GET --target-uri https://iaas.eu-frankfurt-1.oraclecloud.com/20160918/appCatalogListings/ocid1.appcataloglisting.oc1..aaaaaaaa52miob5xfolxu32kuxb2jgmdvtdovkisqvr22uozlr2b5cjwjm7a/resourceVersions`
