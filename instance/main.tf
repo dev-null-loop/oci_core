@@ -17,9 +17,9 @@ data "oci_identity_availability_domains" "these" {
 }
 
 data "cloudinit_config" "this" {
-  for_each      = var.cloud_init
-  gzip          = false
-  base64_encode = false
+  # gzip          = false
+  # base64_encode = false
+  for_each = var.cloud_init
   dynamic "part" {
     for_each = var.cloud_init
     content {
@@ -96,8 +96,9 @@ resource "oci_core_instance" "this" {
   # }
   metadata = {
     ssh_authorized_keys = var.ssh_public_keys
-    user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
-    #user_data           = base64encode(data.cloudinit_config.this.rendered)
+    user_data           = join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered])
+    # user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
+    # user_data           = base64encode(data.cloudinit_config.this.rendered)
   }
   shape = var.shape
   dynamic "shape_config" {
