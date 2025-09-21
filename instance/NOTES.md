@@ -1,8 +1,6 @@
-- from time to time the following bug appears:
-
+- [terraform-provider-cloudinit](https://github.com/hashicorp/terraform-provider-cloudinit) & docs [cloudInit Provider](https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs)
+- From time to time the following bug appears:
 ``` shell
-
-
 │ Error: 400-InvalidParameter, user_data must be base64 encoded
 │ Suggestion: Please update the parameter(s) in the Terraform config as per error message user_data must be base64 encoded
 │ Documentation: https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_instance
