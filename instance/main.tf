@@ -13,7 +13,7 @@ data "oci_core_private_ips" "these" {
 }
 
 data "oci_identity_availability_domains" "these" {
-  compartment_id = var.tenancy_id
+  compartment_id = var.tenancy_ocid
 }
 
 data "cloudinit_config" "this" {

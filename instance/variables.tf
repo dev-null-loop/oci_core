@@ -1,4 +1,4 @@
-variable "tenancy_id" {
+variable "tenancy_ocid" {
   description = "(Required) (Updatable) The OCID of the tenancy."
   type        = string
 }
