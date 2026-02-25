@@ -82,6 +82,12 @@ variable "instance_configuration_id" {
   default     = null
 }
 
+variable "are_legacy_imds_endpoints_disabled" {
+  description = "(Optional) (Updatable) Whether to disable the legacy (/v1) instance metadata service endpoints. Customers who have migrated to /v2 should set this to true for added security. Default is false."
+  type        = bool
+  default     = true
+}
+
 variable "is_pv_encryption_in_transit_enabled" {
   description = "(Optional) Whether to enable in-transit encryption for the data volume's paravirtualized attachment. The default value is false. Use this field only during create. To update use `is_pv_encryption_in_transit_enabled` under `launch_options` instead."
   type        = bool

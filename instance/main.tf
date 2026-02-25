@@ -44,6 +44,8 @@ locals {
 resource "oci_core_instance" "this" {
   availability_domain = local.ads[var.availability_domain - 1].name
   compartment_id      = var.compartment_id
+  shape               = var.shape
+
   agent_config {
     are_all_plugins_disabled = var.agent_config.are_all_plugins_disabled
     is_management_disabled   = var.agent_config.is_management_disabled
@@ -81,9 +83,9 @@ resource "oci_core_instance" "this" {
   fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
   freeform_tags             = var.freeform_tags
   instance_configuration_id = var.instance_configuration_id
-  # instance_options {
-  #	are_legacy_imds_endpoints_disabled = var.instance_instance_options_are_legacy_imds_endpoints_disabled
-  # }
+  instance_options {
+    are_legacy_imds_endpoints_disabled = var.are_legacy_imds_endpoints_disabled
+  }
   # ipxe_script = var.instance_ipxe_script
   is_pv_encryption_in_transit_enabled = var.is_pv_encryption_in_transit_enabled
   # launch_options {
@@ -101,7 +103,6 @@ resource "oci_core_instance" "this" {
     # user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
     # user_data           = base64encode(data.cloudinit_config.this.rendered)
   }
-  shape = var.shape
   dynamic "shape_config" {
     for_each = var.shape_config[*]
     content {
