@@ -77,11 +77,16 @@ resource "oci_core_instance" "this" {
     skip_source_dest_check = var.create_vnic_details.skip_source_dest_check
     subnet_id              = var.create_vnic_details.subnet_id
   }
-  dedicated_vm_host_id      = var.dedicated_vm_host_id
-  defined_tags              = var.defined_tags
-  display_name              = var.display_name
+  dedicated_vm_host_id = var.dedicated_vm_host_id
+  defined_tags         = var.defined_tags
+  display_name         = var.display_name
+  # extended_metadata = {
+  #   some_string   = "stringA"
+  #   nested_object = "{\"some_string\": \"stringB\", \"object\": {\"some_string\": \"stringC\"}}"
+  # }
   fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
   freeform_tags             = var.freeform_tags
+  hostname_label            = var.instance_hostname_label
   instance_configuration_id = var.instance_configuration_id
   instance_options {
     are_legacy_imds_endpoints_disabled = var.are_legacy_imds_endpoints_disabled
@@ -118,13 +123,13 @@ resource "oci_core_instance" "this" {
     source_type             = var.source_details.source_type
     boot_volume_size_in_gbs = var.source_details.boot_volume_size_in_gbs
     boot_volume_vpus_per_gb = var.source_details.boot_volume_vpus_per_gb
-    kms_key_id              = var.source_details.kms_key_id
     # instance_source_image_filter_details {
     #   compartment_id           = var.compartment_id
     #   defined_tags_filter      = var.instance_source_details_instance_source_image_filter_details_defined_tags_filter
     #   operating_system         = var.instance_source_details_instance_source_image_filter_details_operating_system
     #   operating_system_version = var.instance_source_details_instance_source_image_filter_details_operating_system_version
     # }
+    kms_key_id = var.source_details.kms_key_id
   }
   preserve_boot_volume = var.preserve_boot_volume
   state                = var.state
