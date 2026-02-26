@@ -1,0 +1,36 @@
+tenancy_ocid                        = "..."
+compartment_id                      = "..."
+availability_domain                 = 1
+display_name                        = "instance"
+is_pv_encryption_in_transit_enabled = true
+shape                               = "VM.Standard.E5.Flex"
+shape_config = {
+  ocpus         = 1
+  memory_in_gbs = 1
+}
+agent_config = {
+  plugins_config = ["Bastion", "Block Volume Management"]
+}
+ssh_public_keys = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+qUPnq3ELkvEXclIv27YnMsVFdEwVC9XmjpbWYcvIBq3sLF+UBat05PYNLUmvHJS5jA6bb5Wn323YLx2+CyUBD+7UfACNo/aCaliqtskGeDKfzOiFDP2kvfMNIDCOS4hKJpgqE8irOgcTcrL94GU7BjxsyC+JCN/qgWTcvKQNb3duiDz4lzvQI7Cb0ZeFfn6bUAYVe8D0Y9HGoWnmp/7Ku4RLNCQQSjBMmtiTL4q7q9hTG3VEmldOMbncPiEp3bBiepj0sg5dxX5jhYn7ftwNcSkkifaz68yNd13c85dNXq3Nf/8Bw0Jhx28uor3xz7nYAoXdkK7Jnzwjl/lwP0xTOhrBf1iZ8E4FZ1612tIKt2xoWLOn+0fveaGnu+LqNLidWOZ71WUH18Vg2n9UnWm2HQQyA+i9LrIXN/ZXo1osVno4cxVU4zFkaCQDYQ+Cl8BmT0NMvmvlPxsYdzRCreKQB3b1nPZUM6ReTukyrN64DP5eB3J+LDSplcFLgLE+7XU= bd"
+create_vnic_details = {
+  assign_public_ip = true
+  subnet_id        = "..."
+}
+source_details = {
+  source_id = "..."
+}
+cloud_init = {
+  f1 = {
+    filename = "./userdata/openvpn.tftpl"
+    vars = {
+      protocol = "udp"
+      port     = 1194
+    }
+  }
+  f2 = {
+    filename = "./userdata/cloud-init.tftpl"
+  }
+  f3 = {
+    filename = "./userdata/lvm.yaml"
+  }
+}
