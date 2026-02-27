@@ -86,7 +86,7 @@ resource "oci_core_instance" "this" {
   # }
   fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
   freeform_tags             = var.freeform_tags
-  hostname_label            = var.instance_hostname_label
+  hostname_label            = var.hostname_label
   instance_configuration_id = var.instance_configuration_id
   instance_options {
     are_legacy_imds_endpoints_disabled = var.are_legacy_imds_endpoints_disabled
