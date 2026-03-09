@@ -46,15 +46,19 @@ resource "oci_core_instance" "this" {
   compartment_id      = var.compartment_id
   shape               = var.shape
 
-  agent_config {
-    are_all_plugins_disabled = var.agent_config.are_all_plugins_disabled
-    is_management_disabled   = var.agent_config.is_management_disabled
-    is_monitoring_disabled   = var.agent_config.is_monitoring_disabled
-    dynamic "plugins_config" {
-      for_each = coalesce(var.agent_config.plugins_config, [])
-      content {
-	desired_state = "ENABLED"
-	name          = plugins_config.value
+  dynamic "agent_config" {
+    for_each = var.agent_config[*]
+    iterator = ac
+    content {
+      are_all_plugins_disabled = ac.value.are_all_plugins_disabled
+      is_management_disabled   = ac.value.is_management_disabled
+      is_monitoring_disabled   = ac.value.is_monitoring_disabled
+      dynamic "plugins_config" {
+	for_each = coalesce(ac.value.plugins_config, [])
+	content {
+	  desired_state = "ENABLED"
+	  name          = plugins_config.value
+	}
       }
     }
   }
