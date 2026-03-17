@@ -48,8 +48,10 @@ variable "vpus_per_gb" {
 variable "source_details" {
   description = "(Required). id - (Required) The OCID of the boot volume replica, type - (Required) The type can be one of these values: `bootVolume`, `bootVolumeBackup`, `bootVolumeReplica`"
   type = object({
-    id   = string
-    type = string
+    type                       = string
+    change_block_size_in_bytes = optional(number)
+    id                         = optional(string)
+    second_backup_id           = optional(string)
   })
 }
 
@@ -74,4 +76,28 @@ variable "boot_volume_replicas" {
 variable "boot_volume_replicas_deletion" {
   description = "(Optional) (Updatable) enable or disable boot volume replica"
   type        = bool
+}
+
+variable "is_auto_tune_enabled" {
+  description = "Specifies whether the auto-tune performance is enabled for this boot volume. This field is deprecated. Use the `DetachedVolumeAutotunePolicy` instead to enable the volume for detached autotune."
+  type        = bool
+  default     = true
+}
+
+variable "backup_policy_id" {
+  description = "(Optional) If provided, specifies the ID of the boot volume backup policy to assign to the newly created boot volume. If omitted, no policy will be assigned. This field is deprecated. Use the `oci_core_volume_backup_policy_assignments` instead to assign a backup policy to a boot volume."
+  type        = string
+  default     = null
+}
+
+variable "cluster_placement_group_id" {
+  description = "(Optional) The clusterPlacementGroup Id of the volume for volume placement."
+  type        = string
+  default     = null
+}
+
+variable "xrc_kms_key_id" {
+  description = "(Optional) The OCID of the Vault service key which is the master encryption key for the boot volume cross region backups, which will be used in the destination region to encrypt the backup's encryption keys. For more information about the Vault service and encryption keys, see [Overview of Vault service](https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm) and [Using Keys](https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Tasks/usingkeys.htm)."
+  type        = string
+  default     = null
 }

@@ -1,0 +1,6 @@
+compartment_id                = "ocid1.compartment.oc1..aaaaaaaawpw5xpzxhzyhramvfhacgthnjljuojhijewbvm6dxaadsrixs7ya"
+boot_volume_replicas_deletion = true
+source_details = {
+  type = "bootVolume"
+  id   = "ocid1...."
+}
