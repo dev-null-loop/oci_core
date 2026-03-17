@@ -16,20 +16,17 @@ resource "oci_core_boot_volume" "this" {
   size_in_gbs                   = var.size_in_gbs
   vpus_per_gb                   = var.vpus_per_gb
   boot_volume_replicas_deletion = var.boot_volume_replicas_deletion
-
   source_details {
     id   = var.source_details.id
     type = var.source_details.type
   }
-
   dynamic "autotune_policies" {
     for_each = var.autotune_policies[*]
     content {
-      autotune_type   = var.autotune_policies_autotune_type
-      max_vpus_per_gb = var.autotune_policies_max_vpus_per_gb
+      autotune_type   = var.autotune_policies.autotune_type
+      max_vpus_per_gb = var.autotune_policies.max_vpus_per_gb
     }
   }
-
   dynamic "boot_volume_replicas" {
     for_each = var.boot_volume_replicas[*]
     content {

@@ -56,7 +56,7 @@ variable "source_details" {
 variable "autotune_policies" {
   description = "(Optional) (Updatable) The list of autotune policies to be enabled for this volume."
   type = object({
-    type            = string
+    autotune_type   = string
     max_vpus_per_gb = number
   })
   default = null
