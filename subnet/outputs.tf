@@ -15,3 +15,7 @@ output "vcn_id" {
 output "display_name" {
   value = oci_core_subnet.this.display_name
 }
+
+output "route_table_id" {
+  value = oci_core_subnet.this.route_table_id
+}
