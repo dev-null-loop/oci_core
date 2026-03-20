@@ -11,3 +11,7 @@ output "cidr_block" {
 output "vcn_id" {
   value = oci_core_subnet.this.vcn_id
 }
+
+output "display_name" {
+  value = oci_core_subnet.this.display_name
+}
