@@ -1,7 +1,3 @@
-variable "default_security_list_id" {
-  type = string
-}
-
 variable "compartment_id" {
   description = "(Required) The OCID of the compartment to contain the security lists."
   type        = string
@@ -15,17 +11,17 @@ variable "vcn_id" {
 variable "display_name" {
   description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
+  default     = null
 }
 
 variable "ingress_rules" {
   description = "(Optional) (Updatable) Rules for allowing ingress IP packets."
   type = list(object({
-    description      = optional(string)
-    stateless        = string
-    protocol         = string
-    source           = string
-    source_type      = string
-    destination_type = optional(string)
+    description = optional(string)
+    stateless   = optional(bool)
+    protocol    = string
+    source      = string
+    source_type = optional(string)
     tcp_options = optional(object({
       min = number
       max = number
@@ -57,7 +53,7 @@ variable "egress_rules" {
     destination      = string
     destination_type = optional(string)
     protocol         = string
-    stateless        = optional(string)
+    stateless        = optional(bool)
     icmp_options = optional(object({
       type = number
       code = number
