@@ -159,14 +159,32 @@ variable "ssh_public_keys" {
 }
 
 variable "cloud_init" {
-  type = map(object({
+  type = list(object({
     filename     = optional(string)
     content      = optional(string)
     content_type = optional(string)
-    vars         = optional(map(string))
+    vars         = optional(map(string), {})
   }))
-  default = {}
+  default = []
+
+  validation {
+    condition = alltrue([
+      for p in var.cloud_init :
+      p.filename != null || p.content != null
+    ])
+    error_message = "Each cloud_init part must define either filename or content."
+  }
 }
+
+# variable "cloud_init" {
+#   type = map(object({
+#     filename     = optional(string)
+#     content      = optional(string)
+#     content_type = optional(string)
+#     vars         = optional(map(string))
+#   }))
+#   default = {}
+# }
 
 variable "shape" {
   description = "(Required) (Updatable) The shape of an instance. The shape determines the number of CPUs, amount of memory, and other resources allocated to the instance."

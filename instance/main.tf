@@ -17,24 +17,44 @@ data "oci_identity_availability_domains" "these" {
 }
 
 data "cloudinit_config" "this" {
+  count         = length(var.cloud_init) > 0 ? 1 : 0
   gzip          = false
   base64_encode = false
   dynamic "part" {
     for_each = var.cloud_init
+    iterator = part
     content {
-      content_type = coalesce(part.value.content_type, "text/x-shellscript") # [WARNING]: Unhandled unknown content-type (text/plain) userdata: 'b'apiVersion: v1'...'
-      filename     = basename(part.value.filename)
+      content_type = coalesce(part.value.content_type, "text/x-shellscript")
+      filename     = part.value.filename != null ? basename(part.value.filename) : null
       content = (
-        fileexists("${path.root}/${part.value.filename}") ?
-        templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {})) :
-        part.value.content != null ?
-        templatestring(part.value.content, merge(part.value.vars, {})) :
-        "null"
+	part.value.filename != null ?
+	templatefile("${path.root}/${part.value.filename}", part.value.vars) :
+	templatestring(part.value.content, part.value.vars)
       )
       merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
     }
   }
 }
+
+# data "cloudinit_config" "this" {
+#   gzip          = false
+#   base64_encode = false
+#   dynamic "part" {
+#     for_each = var.cloud_init
+#     content {
+#       content_type = coalesce(part.value.content_type, "text/x-shellscript") # [WARNING]: Unhandled unknown content-type (text/plain) userdata: 'b'apiVersion: v1'...'
+#       filename     = basename(part.value.filename)
+#       content = (
+#         fileexists("${path.root}/${part.value.filename}") ?
+#         templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {})) :
+#         part.value.content != null ?
+#         templatestring(part.value.content, merge(part.value.vars, {})) :
+#         "null"
+#       )
+#       merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
+#     }
+#   }
+# }
 
 locals {
   ads = data.oci_identity_availability_domains.these.availability_domains
@@ -53,12 +73,12 @@ resource "oci_core_instance" "this" {
       is_management_disabled   = ac.value.is_management_disabled
       is_monitoring_disabled   = ac.value.is_monitoring_disabled
       dynamic "plugins_config" {
-        for_each = coalesce(ac.value.plugins_config, [])
-        iterator = pc
-        content {
-          desired_state = "ENABLED"
-          name          = pc.value
-        }
+	for_each = coalesce(ac.value.plugins_config, [])
+	iterator = pc
+	content {
+	  desired_state = "ENABLED"
+	  name          = pc.value
+	}
       }
     }
   }
@@ -122,13 +142,21 @@ resource "oci_core_instance" "this" {
     }
   }
 
-  metadata = {
-    ssh_authorized_keys = var.ssh_public_keys
-    user_data           = base64encode(data.cloudinit_config.this.rendered)
-    # user_data           = base64encode(join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered]))
-    # user_data           = join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered])
-    # user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
-  }
+  metadata = merge(
+    {
+      ssh_authorized_keys = var.ssh_public_keys
+    },
+    length(var.cloud_init) > 0 ? {
+      user_data = base64encode(data.cloudinit_config.this[0].rendered)
+    } : {}
+  )
+  # metadata = {
+  #   ssh_authorized_keys = var.ssh_public_keys
+  #   user_data           = base64encode(data.cloudinit_config.this.rendered)
+  #   # user_data           = base64encode(join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered]))
+  #   # user_data           = join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered])
+  #   # user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
+  # }
 
   dynamic "shape_config" {
     for_each = var.shape_config[*]
@@ -152,10 +180,10 @@ resource "oci_core_instance" "this" {
       for_each = var.source_details.instance_source_image_filter_details[*]
       iterator = sifd
       content {
-        compartment_id           = coalesce(sifd.value.compartment_id, var.compartment_id)
-        defined_tags_filter      = sifd.value.defined_tags_filter
-        operating_system         = sifd.value.operating_system
-        operating_system_version = sifd.value.operating_system_version
+	compartment_id           = coalesce(sifd.value.compartment_id, var.compartment_id)
+	defined_tags_filter      = sifd.value.defined_tags_filter
+	operating_system         = sifd.value.operating_system
+	operating_system_version = sifd.value.operating_system_version
       }
     }
 
