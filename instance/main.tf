@@ -143,7 +143,7 @@ resource "oci_core_instance" "this" {
   }
 
   metadata = merge(
-    length(trimspace(coalesce(var.ssh_public_keys, ""))) > 0 ? {
+    length(trimspace(var.ssh_public_keys)) > 0 ? {
       ssh_authorized_keys = var.ssh_public_keys
     } : {},
     length(var.cloud_init) > 0 ? {
