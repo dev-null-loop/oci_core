@@ -153,9 +153,10 @@ variable "launch_options" {
 }
 
 variable "ssh_public_keys" {
-  description = "List of SSH public key to connect to the instance."
+  description = "(Optional) List of SSH public key to connect to the instance."
   type        = string
-  default     = null
+  default     = ""
+  nullable    = false
 }
 
 variable "cloud_init" {
@@ -166,7 +167,6 @@ variable "cloud_init" {
     vars         = optional(map(string), {})
   }))
   default = []
-
   validation {
     condition = alltrue([
       for p in var.cloud_init :
@@ -175,16 +175,6 @@ variable "cloud_init" {
     error_message = "Each cloud_init part must define either filename or content."
   }
 }
-
-# variable "cloud_init" {
-#   type = map(object({
-#     filename     = optional(string)
-#     content      = optional(string)
-#     content_type = optional(string)
-#     vars         = optional(map(string))
-#   }))
-#   default = {}
-# }
 
 variable "shape" {
   description = "(Required) (Updatable) The shape of an instance. The shape determines the number of CPUs, amount of memory, and other resources allocated to the instance."
@@ -224,7 +214,7 @@ variable "source_details" {
 }
 
 variable "preserve_boot_volume" {
-  description = "Preserve boot volume at instance termination"
+  description = "(Optional) Preserve boot volume at instance termination"
   type        = bool
   default     = false
 }

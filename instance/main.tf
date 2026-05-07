@@ -143,20 +143,13 @@ resource "oci_core_instance" "this" {
   }
 
   metadata = merge(
-    {
+    length(trimspace(coalesce(var.ssh_public_keys, ""))) > 0 ? {
       ssh_authorized_keys = var.ssh_public_keys
-    },
+    } : {},
     length(var.cloud_init) > 0 ? {
       user_data = base64encode(data.cloudinit_config.this[0].rendered)
     } : {}
   )
-  # metadata = {
-  #   ssh_authorized_keys = var.ssh_public_keys
-  #   user_data           = base64encode(data.cloudinit_config.this.rendered)
-  #   # user_data           = base64encode(join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered]))
-  #   # user_data           = join("", [for k, v in var.cloud_init : data.cloudinit_config.this[k].rendered])
-  #   # user_data           = join("", [for k, v in var.cloud_init : base64encode(data.cloudinit_config.this[k].rendered)])
-  # }
 
   dynamic "shape_config" {
     for_each = var.shape_config[*]
