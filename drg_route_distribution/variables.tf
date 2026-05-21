@@ -7,13 +7,12 @@ variable "defined_tags" {
 variable "display_name" {
   description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
-  default     = "route_distribution"
+  default     = null
 }
 
 variable "distribution_type" {
   description = "(Required) Whether this distribution defines how routes get imported into route tables or exported through DRG attachments."
   type        = string
-  default     = "IMPORT"
 }
 
 variable "drg_id" {
