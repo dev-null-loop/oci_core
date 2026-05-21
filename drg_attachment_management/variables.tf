@@ -31,6 +31,12 @@ variable "drg_route_table_id" {
   default     = null
 }
 
+variable "export_drg_route_distribution_id" {
+  description = "(Optional) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the export route distribution used to specify how routes in the assigned DRG route table are advertised to the attachment. If this value is null, no routes are advertised through this attachment."
+  type        = string
+  default     = null
+}
+
 variable "defined_tags" {
   description = "(Optional)(Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
@@ -52,4 +58,22 @@ variable "network_details" {
     type                = optional(string)
   })
   default = null
+}
+
+variable "remove_export_drg_route_distribution_trigger" {
+  description = "(Optional) (Updatable) An optional property when set to true during update disables the export of route Distribution by setting export_drg_route_distribution_id to null."
+  type        = bool
+  default     = null
+}
+
+variable "route_table_id" {
+  description = "(Optional)(Updatable) The OCID of the route table the DRG attachment is using."
+  type        = string
+  default     = null
+}
+
+variable "vcn_id" {
+  description = "(Optional) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN."
+  type        = string
+  default     = null
 }
