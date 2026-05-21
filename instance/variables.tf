@@ -1,12 +1,6 @@
-variable "tenancy_ocid" {
-  description = "(Required) (Updatable) The OCID of the tenancy."
-  type        = string
-}
-
 variable "availability_domain" {
   description = "(Required) The availability domain of the instance."
-  type        = number
-  default     = 1
+  type        = string
 }
 
 variable "compartment_id" {
@@ -168,12 +162,15 @@ variable "cloud_init" {
   }))
   default = []
   validation {
-    condition = alltrue([
-      for p in var.cloud_init :
-      p.filename != null || p.content != null
-    ])
+    condition     = alltrue([for p in var.cloud_init : p.filename != null || p.content != null])
     error_message = "Each cloud_init part must define either filename or content."
   }
+}
+
+variable "enable_vnic_lookup_outputs" {
+  description = "(Optional) Whether to resolve `vnic_id` and `primary_private_ip_id` via additional VNIC and private IP data lookups."
+  type        = bool
+  default     = true
 }
 
 variable "shape" {

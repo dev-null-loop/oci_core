@@ -19,9 +19,9 @@ output "public_ip" {
 }
 
 output "vnic_id" {
-  value = data.oci_core_vnic_attachments.these.vnic_attachments[0].vnic_id
+  value = var.enable_vnic_lookup_outputs ? data.oci_core_vnic_attachments.these[0].vnic_attachments[0].vnic_id : null
 }
 
 output "primary_private_ip_id" {
-  value = data.oci_core_private_ips.these.private_ips[0].id
+  value = var.enable_vnic_lookup_outputs ? data.oci_core_private_ips.these[0].private_ips[0].id : null
 }

@@ -1,19 +1,17 @@
 data "oci_core_vnic_attachments" "these" {
+  count               = var.enable_vnic_lookup_outputs ? 1 : 0
   compartment_id      = var.compartment_id
-  availability_domain = local.ads[var.availability_domain - 1].name
+  availability_domain = var.availability_domain
   instance_id         = oci_core_instance.this.id
 }
 
 data "oci_core_private_ips" "these" {
-  vnic_id = data.oci_core_vnic_attachments.these.vnic_attachments[0].vnic_id
+  count   = var.enable_vnic_lookup_outputs ? 1 : 0
+  vnic_id = data.oci_core_vnic_attachments.these[0].vnic_attachments[0].vnic_id
   filter {
     name   = "is_primary"
     values = [true]
   }
-}
-
-data "oci_identity_availability_domains" "these" {
-  compartment_id = var.tenancy_ocid
 }
 
 data "cloudinit_config" "this" {
@@ -27,9 +25,9 @@ data "cloudinit_config" "this" {
       content_type = coalesce(part.value.content_type, "text/x-shellscript")
       filename     = part.value.filename != null ? basename(part.value.filename) : null
       content = (
-	part.value.filename != null ?
-	templatefile("${path.root}/${part.value.filename}", part.value.vars) :
-	templatestring(part.value.content, part.value.vars)
+        part.value.filename != null ?
+        templatefile("${path.root}/${part.value.filename}", part.value.vars) :
+        templatestring(part.value.content, part.value.vars)
       )
       merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
     }
@@ -56,12 +54,8 @@ data "cloudinit_config" "this" {
 #   }
 # }
 
-locals {
-  ads = data.oci_identity_availability_domains.these.availability_domains
-}
-
 resource "oci_core_instance" "this" {
-  availability_domain = local.ads[var.availability_domain - 1].name
+  availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
   shape               = var.shape
 
@@ -73,12 +67,12 @@ resource "oci_core_instance" "this" {
       is_management_disabled   = ac.value.is_management_disabled
       is_monitoring_disabled   = ac.value.is_monitoring_disabled
       dynamic "plugins_config" {
-	for_each = coalesce(ac.value.plugins_config, [])
-	iterator = pc
-	content {
-	  desired_state = "ENABLED"
-	  name          = pc.value
-	}
+        for_each = coalesce(ac.value.plugins_config, [])
+        iterator = pc
+        content {
+          desired_state = "ENABLED"
+          name          = pc.value
+        }
       }
     }
   }
@@ -173,10 +167,10 @@ resource "oci_core_instance" "this" {
       for_each = var.source_details.instance_source_image_filter_details[*]
       iterator = sifd
       content {
-	compartment_id           = coalesce(sifd.value.compartment_id, var.compartment_id)
-	defined_tags_filter      = sifd.value.defined_tags_filter
-	operating_system         = sifd.value.operating_system
-	operating_system_version = sifd.value.operating_system_version
+        compartment_id           = coalesce(sifd.value.compartment_id, var.compartment_id)
+        defined_tags_filter      = sifd.value.defined_tags_filter
+        operating_system         = sifd.value.operating_system
+        operating_system_version = sifd.value.operating_system_version
       }
     }
 
