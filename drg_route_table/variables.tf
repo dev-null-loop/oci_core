@@ -7,7 +7,7 @@ variable "defined_tags" {
 variable "display_name" {
   description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
-  default     = "route_table"
+  default     = null
 }
 
 variable "drg_id" {
