@@ -13,6 +13,11 @@ output "display_name" {
   value       = oci_core_drg.this.display_name
 }
 
+output "defined_tags" {
+  description = "Defined tags for this resource. Each key is predefined and scoped to a namespace."
+  value       = oci_core_drg.this.defined_tags
+}
+
 output "default_drg_route_tables" {
   description = "The default DRG route table for this DRG. Each network type has a default DRG route table."
   value       = oci_core_drg.this.default_drg_route_tables
@@ -21,6 +26,11 @@ output "default_drg_route_tables" {
 output "default_export_drg_route_distribution_id" {
   description = "The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of this DRG's default export route distribution for the DRG attachments."
   value       = oci_core_drg.this.default_export_drg_route_distribution_id
+}
+
+output "freeform_tags" {
+  description = "Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace."
+  value       = oci_core_drg.this.freeform_tags
 }
 
 output "redundancy_status" {
