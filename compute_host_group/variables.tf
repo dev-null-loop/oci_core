@@ -1,0 +1,42 @@
+variable "availability_domain" {
+  description = "(Required) The availability domain of a host group.  Example: `Uocm:PHX-AD-1`"
+  type        = string
+}
+
+variable "compartment_id" {
+  description = "(Required) (Updatable) The OCID of the compartment that contains host group."
+  type        = string
+}
+
+variable "configurations" {
+  description = "(Optional) (Updatable) A list of HostGroupConfiguration objects"
+  type = list(object({
+    firmware_bundle_id = optional(string)
+    recycle_level      = optional(string)
+    state              = optional(string)
+    target             = optional(string)
+  }))
+  default = []
+}
+
+variable "defined_tags" {
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Operations.CostCenter\": \"42\"}`"
+  type        = map(string)
+  default     = null
+}
+
+variable "display_name" {
+  description = "(Required) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
+  type        = string
+}
+
+variable "freeform_tags" {
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
+  type        = map(string)
+  default     = {}
+}
+
+variable "is_targeted_placement_required" {
+  description = "(Required) (Updatable) A flag that allows customers to restrict placement for hosts attached to the group. If true, the only way to place on hosts is to target the specific host group."
+  type        = bool
+}
