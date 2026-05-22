@@ -19,7 +19,11 @@ variable "cidr_blocks" {
   validation {
     condition = alltrue([
       for cidr in var.cidr_blocks :
-      can(cidrhost(cidr, 0)) && tonumber(split(cidr, "/")[1]) >= 16 && tonumber(split(cidr, "/")[1]) <= 30
+      can(cidrhost(cidr, 0)) &&
+      length(split(cidr, "/")) == 2 &&
+      can(tonumber(split(cidr, "/")[1])) &&
+      tonumber(split(cidr, "/")[1]) >= 16 &&
+      tonumber(split(cidr, "/")[1]) <= 30
     ])
     error_message = "Each VCN CIDR block must be valid and between /16 and /30."
   }
