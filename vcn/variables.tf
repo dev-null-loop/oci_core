@@ -1,10 +1,10 @@
 variable "byoipv6cidr_details" {
   description = "(Optional) The list of BYOIPv6 OCIDs and BYOIPv6 prefixes required to create a VCN that uses BYOIPv6 address ranges."
-  type = object({
+  type = list(object({
     byoipv6range_id = string
     ipv6cidr_block  = string
-  })
-  default = null
+  }))
+  default = []
 }
 
 variable "compartment_id" {
@@ -16,6 +16,13 @@ variable "cidr_blocks" {
   description = "(Optional) (Updatable) The list of one or more IPv4 CIDR blocks for the VCN"
   type        = list(string)
   default     = ["10.0.0.0/16"]
+  validation {
+    condition = alltrue([
+      for cidr in var.cidr_blocks :
+      can(cidrhost(cidr, 0)) && tonumber(split(cidr, "/")[1]) >= 16 && tonumber(split(cidr, "/")[1]) <= 30
+    ])
+    error_message = "Each VCN CIDR block must be valid and between /16 and /30."
+  }
 }
 
 variable "dns_label" {
@@ -37,7 +44,7 @@ variable "defined_tags" {
 }
 
 variable "freeform_tags" {
-  description = "Free form tags applied to organize and list multiple subnets."
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
   type        = map(string)
   default     = {}
 }
@@ -54,8 +61,26 @@ variable "ipv6private_cidr_blocks" {
   default     = []
 }
 
-# variable "is_oracle_gua_allocation_enabled" {
-#   description = "(Optional) Specifies whether to skip Oracle allocated IPv6 GUA. By default, Oracle will allocate one GUA of /56 size for an IPv6 enabled VCN."
-#   type        = bool
-#   default     = false
-# }
+variable "is_oracle_gua_allocation_enabled" {
+  description = "(Optional) Specifies whether Oracle allocates an IPv6 global unicast address (GUA) prefix to the VCN. By default, Oracle allocates one GUA prefix of /56 size for an IPv6-enabled VCN if this value is not explicitly set to false. When this value is changed from `true` to `false` on an existing VCN, the provider removes that prefix from the existing VCN. Customers must manage `is_oracle_gua_allocation_enabled` exclusively through Terraform. Changing Oracle GUA allocation outside Terraform can cause Terraform state to differ from the VCN configuration in Oracle Cloud Infrastructure and can result in unexpected plans or failed updates."
+  type        = bool
+  default     = null
+}
+
+variable "security_attributes" {
+  description = "(Optional) (Updatable) Security Attributes for this resource. This is unique to ZPR, and helps identify which resources are allowed to be accessed by what permission controls.  Example: `{\"Oracle-DataSecurity-ZPR.MaxEgressCount.value\": \"42\", \"Oracle-DataSecurity-ZPR.MaxEgressCount.mode\": \"audit\"}`"
+  type        = map(string)
+  default     = {}
+}
+
+variable "lookup_dns_resolver_id" {
+  description = "(Optional) Whether to query the asynchronously created DNS resolver association after VCN creation. Disable this if callers do not need `dns_resolver_id` and you want to avoid the provider workaround delay."
+  type        = bool
+  default     = true
+}
+
+variable "dns_resolver_lookup_wait_duration" {
+  description = "(Optional) How long to wait after VCN creation before querying the DNS resolver association data source workaround described in README.md."
+  type        = string
+  default     = "5s"
+}
