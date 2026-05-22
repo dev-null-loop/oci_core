@@ -1,59 +1,27 @@
 variable "compartment_id" {
-  description = "The OCID of the compartment to contain the network security group."
+  description = "(Required) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to contain the network security group."
   type        = string
 }
 
 variable "vcn_id" {
-  description = "The OCID of the VCN the network security group is attached to."
+  description = "(Required) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN to create the network security group in."
   type        = string
 }
 
 variable "display_name" {
-  description = "Name of the network security group"
+  description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
+  default     = null
 }
 
-variable "rules" {
-  description = "nsg parameters: protocol, stateless, direction, source, source type, destination, destination type, tcp options, udp options "
-  type = map(object({
-    direction        = string
-    protocol         = string
-    description      = optional(string)
-    destination      = optional(string)
-    destination_type = optional(string)
-    icmp_options = optional(object({
-      type = optional(string)
-      code = optional(number)
-    }))
-    source      = string
-    source_type = string
-    stateless   = string
-    tcp_options = optional(object({
-      destination_port_range = optional(object({
-	min = number
-	max = number
-      }))
-      source_port_range = optional(object({
-	min = number
-	max = number
-      }))
-    }))
-    udp_options = optional(object({
-      destination_port_range = optional(object({
-	min = number
-	max = number
-      }))
-      source_port_range = optional(object({
-	min = number
-	max = number
-      }))
-    }))
-  }))
-  default = null
+variable "defined_tags" {
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Operations.CostCenter\": \"42\"}`"
+  type        = map(string)
+  default     = null
 }
 
 variable "freeform_tags" {
-  description = "Free form tags applied to organize and list multiple network security group"
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
   type        = map(string)
   default     = {}
 }
