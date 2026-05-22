@@ -4,10 +4,11 @@ variable "boot_volume_id" {
   default     = null
 }
 
-# variable "compartment_id" {
-#   description="(Optional) (Updatable) The OCID of the compartment that contains the boot volume backup."
-#   type=string
-# }
+variable "compartment_id" {
+  description = "(Optional) (Updatable) The OCID of the compartment that contains the boot volume backup."
+  type        = string
+  default     = null
+}
 
 variable "defined_tags" {
   description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
@@ -24,7 +25,7 @@ variable "display_name" {
 variable "freeform_tags" {
   description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
-  default     = null
+  default     = {}
 }
 
 variable "kms_key_id" {
