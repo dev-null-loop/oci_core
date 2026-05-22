@@ -1,6 +1,7 @@
 variable "compartment_id" {
   description = "(Required) (Updatable) The OCID of the compartment to contain the RPC."
   type        = string
+  default     = null
 }
 
 variable "display_name" {
@@ -12,6 +13,7 @@ variable "display_name" {
 variable "drg_ids" {
   description = "(Required) Maps of drg ocid to select from the requestor/acceptor pair"
   type        = map(string)
+  default     = null
 }
 
 variable "defined_tags" {
@@ -29,4 +31,30 @@ variable "freeform_tags" {
 variable "peer_region_name" {
   description = "(Optional) The name of the region that contains the RPC you want to peer with.  Example: `us-ashburn-1`"
   type        = string
+  default     = null
+}
+
+variable "requestor" {
+  description = "(Optional) Explicit requestor-side configuration for a usable RPC peering pair."
+  type = object({
+    compartment_id   = string
+    drg_id           = string
+    display_name     = optional(string)
+    defined_tags     = optional(map(string))
+    freeform_tags    = optional(map(string), {})
+    peer_region_name = string
+  })
+  default = null
+}
+
+variable "acceptor" {
+  description = "(Optional) Explicit acceptor-side configuration for a usable RPC peering pair."
+  type = object({
+    compartment_id = string
+    drg_id         = string
+    display_name   = optional(string)
+    defined_tags   = optional(map(string))
+    freeform_tags  = optional(map(string), {})
+  })
+  default = null
 }
