@@ -23,6 +23,11 @@ output "default_security_list_id" {
   value       = oci_core_vcn.this.default_security_list_id
 }
 
+output "managed_default_security_list_id" {
+  description = "The managed default security list OCID when `manage_default_security_list` is enabled, otherwise null."
+  value       = try(oci_core_default_security_list.this[0].id, null)
+}
+
 output "display_name" {
   description = "A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   value       = oci_core_vcn.this.display_name
