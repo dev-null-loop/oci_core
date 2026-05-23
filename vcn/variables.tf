@@ -87,77 +87,8 @@ variable "dns_resolver_lookup_wait_duration" {
   default     = "5s"
 }
 
-variable "manage_default_security_list" {
-  description = "(Optional) Whether to manage the VCN's default security list from this module. This is an opt-in exception for callers who want the default security list emptied or explicitly controlled as part of VCN creation."
+variable "empty_default_security_list" {
+  description = "(Optional) Whether to explicitly empty the VCN's default security list as part of VCN creation."
   type        = bool
   default     = false
-}
-
-variable "default_security_list" {
-  description = "(Optional) Settings for the VCN's default security list when `manage_default_security_list` is enabled."
-  type = object({
-    defined_tags  = optional(map(string), null)
-    display_name  = optional(string)
-    freeform_tags = optional(map(string), {})
-    ingress_rules = optional(list(object({
-      description = optional(string)
-      stateless   = optional(bool)
-      protocol    = string
-      source      = string
-      source_type = optional(string)
-      tcp_options = optional(object({
-	min = number
-	max = number
-	source_port_range = optional(object({
-	  min = number
-	  max = number
-	}))
-      }))
-      udp_options = optional(object({
-	min = number
-	max = number
-	source_port_range = optional(object({
-	  min = number
-	  max = number
-	}))
-      }))
-      icmp_options = optional(object({
-	type = number
-	code = number
-      }))
-    })), [])
-    egress_rules = optional(list(object({
-      description      = optional(string)
-      destination      = string
-      destination_type = optional(string)
-      protocol         = string
-      stateless        = optional(bool)
-      icmp_options = optional(object({
-	type = number
-	code = number
-      }))
-      tcp_options = optional(object({
-	min = number
-	max = number
-	source_port_range = optional(object({
-	  min = number
-	  max = number
-	}))
-      }))
-      udp_options = optional(object({
-	min = number
-	max = number
-	source_port_range = optional(object({
-	  min = number
-	  max = number
-	}))
-      }))
-    })), [])
-  })
-  default = {
-    defined_tags  = null
-    freeform_tags = {}
-    ingress_rules = []
-    egress_rules  = []
-  }
 }
