@@ -11,13 +11,21 @@ variable "vcn_id" {
 variable "display_name" {
   description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
-  default     = "sg"
+  default     = null
 }
 
 variable "route_table_id" {
   description = "(Optional) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the route table the service gateway will use."
   type        = string
   default     = null
+}
+
+variable "services" {
+  description = "(Required) (Updatable) List of the OCIDs of the [Service](https://docs.cloud.oracle.com/iaas/api/#/en/iaas/latest/Service/) objects to enable for the service gateway. The list can be empty if you don't want to enable any `Service` objects when you create the gateway."
+  type = list(object({
+    service_id = string
+  }))
+  default = []
 }
 
 variable "defined_tags" {

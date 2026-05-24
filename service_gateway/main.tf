@@ -1,15 +1,11 @@
-data "oci_core_services" "these" {
-  filter {
-    name   = "name"
-    values = ["All [A-Z][A-Z][A-Z] Services In Oracle Services Network"]
-    regex  = true
-  }
-}
-
 resource "oci_core_service_gateway" "this" {
   compartment_id = var.compartment_id
-  services {
-    service_id = data.oci_core_services.these.services[0].id
+  dynamic "services" {
+    for_each = var.services
+    iterator = se
+    content {
+      service_id = se.value.service_id
+    }
   }
   vcn_id         = var.vcn_id
   defined_tags   = var.defined_tags
