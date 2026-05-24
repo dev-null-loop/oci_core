@@ -37,3 +37,17 @@ resource "oci_core_default_security_list" "this" {
   count                      = var.empty_default_security_list ? 1 : 0
   manage_default_resource_id = oci_core_vcn.this.default_security_list_id
 }
+
+resource "oci_core_default_route_table" "this" {
+  count                      = var.empty_default_route_table ? 1 : 0
+  manage_default_resource_id = oci_core_vcn.this.default_route_table_id
+}
+
+resource "oci_core_default_dhcp_options" "this" {
+  count                      = var.reset_default_dhcp_options ? 1 : 0
+  manage_default_resource_id = oci_core_vcn.this.default_dhcp_options_id
+  options {
+    type        = "DomainNameServer"
+    server_type = "VcnLocalPlusInternet"
+  }
+}

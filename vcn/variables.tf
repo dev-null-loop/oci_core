@@ -92,3 +92,15 @@ variable "empty_default_security_list" {
   type        = bool
   default     = false
 }
+
+variable "empty_default_route_table" {
+  description = "(Optional) Whether to explicitly empty the VCN's default route table as part of VCN creation."
+  type        = bool
+  default     = false
+}
+
+variable "reset_default_dhcp_options" {
+  description = "(Optional) Whether to explicitly reset the VCN's default DHCP options to the provider's minimal default-resource behavior as part of VCN creation."
+  type        = bool
+  default     = false
+}

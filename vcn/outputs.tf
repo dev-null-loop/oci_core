@@ -28,6 +28,16 @@ output "managed_default_security_list_id" {
   value       = try(oci_core_default_security_list.this[0].id, null)
 }
 
+output "managed_default_route_table_id" {
+  description = "The managed default route table OCID when `empty_default_route_table` is enabled, otherwise null."
+  value       = try(oci_core_default_route_table.this[0].id, null)
+}
+
+output "managed_default_dhcp_options_id" {
+  description = "The managed default DHCP options OCID when `reset_default_dhcp_options` is enabled, otherwise null."
+  value       = try(oci_core_default_dhcp_options.this[0].id, null)
+}
+
 output "display_name" {
   description = "A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   value       = oci_core_vcn.this.display_name
