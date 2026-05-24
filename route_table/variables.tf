@@ -18,16 +18,17 @@ variable "route_rules" {
   description = "(Optional) (Updatable) The collection of rules used for routing destination IPs to network devices."
   type = list(object({
     description       = optional(string)
-    destination       = string
-    destination_type  = optional(string, "CIDR_BLOCK")
+    destination       = optional(string)
+    destination_type  = optional(string)
     network_entity_id = string
+    route_type        = optional(string)
   }))
   default = []
 
   validation {
     condition = alltrue([
       for rule in var.route_rules :
-      contains(["CIDR_BLOCK", "SERVICE_CIDR_BLOCK"], rule.destination_type)
+      rule.destination_type == null || contains(["CIDR_BLOCK", "SERVICE_CIDR_BLOCK"], rule.destination_type)
     ])
     error_message = "Each route rule destination_type must be CIDR_BLOCK or SERVICE_CIDR_BLOCK."
   }
@@ -35,7 +36,7 @@ variable "route_rules" {
   validation {
     condition = alltrue([
       for rule in var.route_rules :
-      length(trimspace(rule.destination)) > 0
+      rule.destination != null && length(trimspace(rule.destination)) > 0
     ])
     error_message = "Each route rule must include a non-empty destination."
   }
@@ -46,6 +47,14 @@ variable "route_rules" {
       length(trimspace(rule.network_entity_id)) > 0
     ])
     error_message = "Each route rule must include a non-empty network_entity_id."
+  }
+
+  validation {
+    condition = alltrue([
+      for rule in var.route_rules :
+      rule.destination_type == null || rule.destination != null
+    ])
+    error_message = "Each route rule that sets destination_type must also set destination."
   }
 }
 
