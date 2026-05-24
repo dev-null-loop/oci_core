@@ -20,12 +20,9 @@ variable "route_table_id" {
   default     = null
 }
 
-variable "services" {
-  description = "(Required) (Updatable) List of the OCIDs of the [Service](https://docs.cloud.oracle.com/iaas/api/#/en/iaas/latest/Service/) objects to enable for the service gateway. The list can be empty if you don't want to enable any `Service` objects when you create the gateway."
-  type = list(object({
-    service_id = string
-  }))
-  default = []
+variable "service_id" {
+  description = "(Required) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the [Service](https://docs.cloud.oracle.com/iaas/api/#/en/iaas/latest/Service/) object to enable for the service gateway."
+  type        = string
 }
 
 variable "defined_tags" {

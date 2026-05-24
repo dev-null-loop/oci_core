@@ -1,11 +1,7 @@
 resource "oci_core_service_gateway" "this" {
   compartment_id = var.compartment_id
-  dynamic "services" {
-    for_each = var.services
-    iterator = se
-    content {
-      service_id = se.value.service_id
-    }
+  services {
+    service_id = var.service_id
   }
   vcn_id         = var.vcn_id
   defined_tags   = var.defined_tags
