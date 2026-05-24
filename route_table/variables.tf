@@ -21,7 +21,6 @@ variable "route_rules" {
     destination       = optional(string)
     destination_type  = optional(string)
     network_entity_id = string
-    route_type        = optional(string)
   }))
   default = []
 
