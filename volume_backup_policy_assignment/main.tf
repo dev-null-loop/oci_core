@@ -1,4 +1,5 @@
 resource "oci_core_volume_backup_policy_assignment" "this" {
-  asset_id  = var.asset_id
-  policy_id = var.policy_id
+  asset_id       = var.asset_id
+  policy_id      = var.policy_id
+  xrc_kms_key_id = var.xrc_kms_key_id
 }
