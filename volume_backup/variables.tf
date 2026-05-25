@@ -1,5 +1,21 @@
 variable "volume_id" {
-  description = "(Optional) The OCID of the volume that needs to be backed up.**Note: To create the resource either `volume_id` or `source_details` is required to be set."
+  description = "(Optional) The OCID of the volume that needs to be backed up."
+  type        = string
+  default     = null
+}
+
+variable "source_details" {
+  description = "(Optional) Details of the volume backup source in the cloud."
+  type = object({
+    region           = string
+    volume_backup_id = string
+    kms_key_id       = optional(string)
+  })
+  default = null
+}
+
+variable "compartment_id" {
+  description = "(Optional) (Updatable) The OCID of the compartment that contains the volume backup."
   type        = string
   default     = null
 }
@@ -19,7 +35,7 @@ variable "display_name" {
 variable "freeform_tags" {
   description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
-  default     = null
+  default     = {}
 }
 
 variable "kms_key_id" {
@@ -32,14 +48,4 @@ variable "type" {
   description = "(Optional) The type of backup to create. If omitted, defaults to INCREMENTAL. Supported values are 'FULL' or 'INCREMENTAL'."
   type        = string
   default     = null
-}
-
-variable "source_details" {
-  description = "(Optional) Details of the volume backup source in the cloud."
-  type = object({
-    kms_key_id       = string
-    region           = string
-    volume_backup_id = string
-  })
-  default = null
 }
