@@ -5,7 +5,7 @@ variable "availability_domain" {
 }
 
 variable "cidr_block" {
-  description = "(Required) (Updatable) The range of IPv4 addresses that will be used for layer 3 communication with hosts outside the VLAN. The CIDR must maintain the following rules - . The CIDR block is valid and correctly formatted. b. The new range is within one of the parent VCN ranges."
+  description = "(Required) (Updatable) The range of IPv4 addresses that will be used for layer 3 communication with hosts outside the VLAN. The CIDR must maintain the following rules -"
   type        = string
 }
 
@@ -15,7 +15,7 @@ variable "compartment_id" {
 }
 
 variable "defined_tags" {
-  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Operations.CostCenter\": \"42\"}`"
   type        = map(string)
   default     = null
 }
@@ -27,7 +27,7 @@ variable "display_name" {
 }
 
 variable "freeform_tags" {
-  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
   type        = map(string)
   default     = {}
 }
@@ -51,6 +51,6 @@ variable "vcn_id" {
 
 variable "vlan_tag" {
   description = "(Optional) The IEEE 802.1Q VLAN tag for this VLAN. The value must be unique across all VLANs in the VCN. If you don't provide a value, Oracle assigns one. You cannot change the value later. VLAN tag 0 is reserved for use by Oracle."
-  type        = string
+  type        = number
   default     = null
 }
