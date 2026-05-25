@@ -7,6 +7,7 @@ resource "oci_core_subnet" "this" {
   display_name               = var.display_name
   dns_label                  = var.dns_label
   freeform_tags              = var.freeform_tags
+  ipv4cidr_blocks            = var.ipv4cidr_blocks
   ipv6cidr_block             = var.ipv6cidr_block
   ipv6cidr_blocks            = var.ipv6cidr_blocks
   prohibit_internet_ingress  = var.prohibit_internet_ingress
@@ -14,8 +15,4 @@ resource "oci_core_subnet" "this" {
   route_table_id             = var.route_table_id
   security_list_ids          = var.security_list_ids
   vcn_id                     = var.vcn_id
-  timeouts {
-    create = "1m"
-    delete = "1m"
-  }
 }

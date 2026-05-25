@@ -1,11 +1,13 @@
 variable "availability_domain" {
   description = "(Optional) Controls whether the subnet is regional or specific to an availability domain. Oracle recommends creating regional subnets because they're more flexible and make it easier to implement failover across availability domains. Originally, AD-specific subnets were the only kind available to use."
-  type        = number
+  type        = string
   default     = null
 }
+
 variable "cidr_block" {
-  description = "(Required) (Updatable) The CIDR IP address range of the subnet."
+  description = "(Optional) (Updatable) The CIDR IP address range of the subnet. The CIDR must maintain the following rules -"
   type        = string
+  default     = null
 }
 
 variable "compartment_id" {
@@ -14,7 +16,7 @@ variable "compartment_id" {
 }
 
 variable "defined_tags" {
-  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Operations.CostCenter\": \"42\"}`"
   type        = map(string)
   default     = null
 }
@@ -38,9 +40,15 @@ variable "dns_label" {
 }
 
 variable "freeform_tags" {
-  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
   type        = map(string)
   default     = {}
+}
+
+variable "ipv4cidr_blocks" {
+  description = "(Optional) The list of all IPv4 CIDR blocks for the subnet that meets the following criteria:"
+  type        = list(string)
+  default     = []
 }
 
 variable "ipv6cidr_block" {
@@ -50,7 +58,7 @@ variable "ipv6cidr_block" {
 }
 
 variable "ipv6cidr_blocks" {
-  description = "(Optional) (Updatable) The list of all IPv6 prefixes (Oracle allocated IPv6 GUA, ULA or private IPv6 prefixes, BYOIPv6 prefixes) for the subnet."
+  description = "(Optional) (Updatable) The list of all IPv6 prefixes (Oracle allocated IPv6 GUA, ULA or private IPv6 prefixes, BYOIPv6 prefixes) for the subnet that meets the following criteria:"
   type        = list(string)
   default     = []
 }
@@ -58,13 +66,13 @@ variable "ipv6cidr_blocks" {
 variable "prohibit_internet_ingress" {
   description = "(Optional) Whether to disallow ingress internet traffic to VNICs within this subnet. Defaults to false."
   type        = bool
-  default     = false
+  default     = null
 }
 
 variable "prohibit_public_ip_on_vnic" {
   description = "(Optional) Whether VNICs within this subnet can have public IP addresses. Defaults to false, which means VNICs created in this subnet will automatically be assigned public IP addresses unless specified otherwise during instance launch or VNIC creation (with the `assignPublicIp` flag in [CreateVnicDetails](https://docs.cloud.oracle.com/iaas/api/#/en/iaas/latest/CreateVnicDetails/)). If `prohibitPublicIpOnVnic` is set to true, VNICs created in this subnet cannot have public IP addresses (that is, it's a private subnet)."
   type        = bool
-  default     = false
+  default     = null
 }
 
 variable "route_table_id" {
