@@ -1,20 +1,39 @@
 variable "compartment_id" {
-  description = "The OCID of the compartment to contain the internet gateway."
+  description = "(Required) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to contain the internet gateway."
   type        = string
 }
 
 variable "vcn_id" {
-  description = "The OCID of the VCN the Internet Gateway is attached to."
+  description = "(Required) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the Internet Gateway is attached to."
   type        = string
+}
+
+variable "enabled" {
+  description = "(Optional) (Updatable) Whether the gateway is enabled upon creation."
+  type        = bool
+  default     = true
+}
+
+variable "defined_tags" {
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Operations.CostCenter\": \"42\"}`"
+  type        = map(string)
+  default     = null
 }
 
 variable "display_name" {
-  description = "Name of the internet gateway"
+  description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
+  default     = null
 }
 
 variable "freeform_tags" {
-  description = "Free form tags applied to organize and list multiple internet gateways"
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{\"Department\": \"Finance\"}`"
   type        = map(string)
   default     = {}
+}
+
+variable "route_table_id" {
+  description = "(Optional) (Updatable) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the route table the Internet Gateway is using."
+  type        = string
+  default     = null
 }

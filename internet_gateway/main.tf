@@ -1,10 +1,9 @@
 resource "oci_core_internet_gateway" "this" {
   compartment_id = var.compartment_id
   vcn_id         = var.vcn_id
+  enabled        = var.enabled
+  defined_tags   = var.defined_tags
   display_name   = var.display_name
   freeform_tags  = var.freeform_tags
-  timeouts {
-    create = "1m"
-    delete = "1m"
-  }
+  route_table_id = var.route_table_id
 }
