@@ -5,13 +5,13 @@ resource "oci_core_volume_group_backup" "this" {
   display_name    = var.display_name
   freeform_tags   = var.freeform_tags
   type            = var.type
-
   dynamic "source_details" {
     for_each = var.source_details[*]
+    iterator = sd
     content {
-      kms_key_id             = var.source_details.kms_key_id
-      region                 = var.source_details.region
-      volume_group_backup_id = var.source_details.volume_group_backup_id
+      kms_key_id             = sd.value.kms_key_id
+      region                 = sd.value.region
+      volume_group_backup_id = sd.value.volume_group_backup_id
     }
   }
 }
