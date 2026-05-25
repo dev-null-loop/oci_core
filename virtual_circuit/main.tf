@@ -4,7 +4,7 @@ resource "oci_core_virtual_circuit" "this" {
   bandwidth_shape_name = var.bandwidth_shape_name
   bgp_admin_state      = var.bgp_admin_state
   dynamic "cross_connect_mappings" {
-    for_each = var.cross_connect_mappings != [] ? var.cross_connect_mappings : []
+    for_each = var.cross_connect_mappings
     iterator = ccm
     content {
       bgp_md5auth_key                         = ccm.value.bgp_md5auth_key
@@ -27,9 +27,10 @@ resource "oci_core_virtual_circuit" "this" {
   provider_service_id       = var.provider_service_id
   provider_service_key_name = var.provider_service_key_name
   dynamic "public_prefixes" {
-    for_each = var.public_prefixes[*]
+    for_each = var.public_prefixes
+    iterator = pp
     content {
-      cidr_block = public_prefixes.value.cidr_block
+      cidr_block = pp.value.cidr_block
     }
   }
   region         = var.region
