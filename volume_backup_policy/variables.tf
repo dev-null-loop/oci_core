@@ -6,7 +6,7 @@ variable "compartment_id" {
 variable "defined_tags" {
   description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
-  default     = {}
+  default     = null
 }
 
 variable "destination_region" {
@@ -29,10 +29,10 @@ variable "freeform_tags" {
 
 variable "schedules" {
   description = "(Optional) (Updatable) The collection of schedules for the volume backup policy. See see [Schedules](https://docs.cloud.oracle.com/iaas/Content/Block/Tasks/schedulingvolumebackups.htm#schedules) in [Policy-Based Backups](https://docs.cloud.oracle.com/iaas/Content/Block/Tasks/schedulingvolumebackups.htm) for more information."
-  type = object({
-    backup_type       = optional(string)
-    period            = optional(string)
-    retention_seconds = optional(number)
+  type = list(object({
+    backup_type       = string
+    period            = string
+    retention_seconds = number
     day_of_month      = optional(number)
     day_of_week       = optional(string)
     hour_of_day       = optional(number)
@@ -40,7 +40,6 @@ variable "schedules" {
     offset_seconds    = optional(number)
     offset_type       = optional(string)
     time_zone         = optional(string)
-  })
-  nullable = true
-  default  = null
+  }))
+  default = []
 }
