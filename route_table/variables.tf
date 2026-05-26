@@ -19,7 +19,7 @@ variable "route_rules" {
   type = list(object({
     description       = optional(string)
     destination       = optional(string)
-    destination_type  = optional(string)
+    destination_type  = optional(string, "CIDR_BLOCK")
     network_entity_id = string
   }))
   default = []
