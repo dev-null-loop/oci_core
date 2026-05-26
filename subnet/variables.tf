@@ -48,7 +48,7 @@ variable "freeform_tags" {
 variable "ipv4cidr_blocks" {
   description = "(Optional) The list of all IPv4 CIDR blocks for the subnet that meets the following criteria:"
   type        = list(string)
-  default     = []
+  default     = null
 }
 
 variable "ipv6cidr_block" {
