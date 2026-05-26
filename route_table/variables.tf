@@ -17,7 +17,7 @@ variable "display_name" {
 variable "route_rules" {
   description = "(Optional) (Updatable) The collection of rules used for routing destination IPs to network devices."
   type = list(object({
-    description       = optional(string)
+    description       = optional(string, null)
     destination       = optional(string)
     destination_type  = optional(string, "CIDR_BLOCK")
     network_entity_id = string
