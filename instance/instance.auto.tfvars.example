@@ -9,7 +9,16 @@ shape_config = {
   memory_in_gbs = 1
 }
 agent_config = {
-  plugins_config = ["Bastion", "Block Volume Management"]
+  plugins_config = [
+    {
+      desired_state = "ENABLED"
+      name          = "Bastion"
+    },
+    {
+      desired_state = "ENABLED"
+      name          = "Block Volume Management"
+    }
+  ]
 }
 ssh_public_keys = "ssh-rsa ..."
 create_vnic_details = {

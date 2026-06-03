@@ -67,11 +67,11 @@ resource "oci_core_instance" "this" {
       is_management_disabled   = ac.value.is_management_disabled
       is_monitoring_disabled   = ac.value.is_monitoring_disabled
       dynamic "plugins_config" {
-        for_each = coalesce(ac.value.plugins_config, [])
+        for_each = ac.value.plugins_config != null ? ac.value.plugins_config : []
         iterator = pc
         content {
-          desired_state = "ENABLED"
-          name          = pc.value
+          desired_state = pc.value.desired_state
+          name          = pc.value.name
         }
       }
     }

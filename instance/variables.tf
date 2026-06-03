@@ -9,18 +9,17 @@ variable "compartment_id" {
 }
 
 variable "agent_config" {
+  description = "(Optional) (Updatable) Configuration options for the Oracle Cloud Agent software running on the instance."
   type = object({
-    are_all_plugins_disabled = optional(bool, false)
-    is_management_disabled   = optional(bool, false)
-    is_monitoring_disabled   = optional(bool, false)
-    plugins_config           = optional(list(string), [])
+    are_all_plugins_disabled = optional(bool)
+    is_management_disabled   = optional(bool)
+    is_monitoring_disabled   = optional(bool)
+    plugins_config = optional(list(object({
+      desired_state = string
+      name          = string
+    })), [])
   })
-  default = {
-    are_all_plugins_disabled = false
-    is_management_disabled   = false
-    is_monitoring_disabled   = false
-    plugins_config           = []
-  }
+  default = null
 }
 
 variable "availability_config" {
