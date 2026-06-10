@@ -23,10 +23,10 @@ output "freeform_tags" {
   value       = oci_core_route_table.this.freeform_tags
 }
 
-output "route_rules" {
-  description = "The collection of rules for routing destination IPs to network devices."
-  value       = oci_core_route_table.this.route_rules
-}
+# output "route_rules" {
+#   description = "The collection of rules for routing destination IPs to network devices."
+#   value       = oci_core_route_table.this.route_rules
+# }
 
 output "state" {
   description = "The route table's current state."
