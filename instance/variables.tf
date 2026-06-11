@@ -50,18 +50,28 @@ variable "compute_host_group_id" {
 }
 
 variable "create_vnic_details" {
-  description = " (Required) (Updatable) Contains properties for a VNIC. You use this object when creating the primary VNIC during instance launch or when creating a secondary VNIC. For more information about VNICs, see [Virtual Network Interface Cards (VNICs)](https://docs.cloud.oracle.com/iaas/Content/Network/Tasks/managingVNICs.htm)."
+  description = "(Optional) (Updatable) Contains properties for a VNIC. You use this object when creating the primary VNIC during instance launch or when creating a secondary VNIC. For more information about VNICs, see [Virtual Network Interface Cards (VNICs)](https://docs.cloud.oracle.com/iaas/Content/Network/Tasks/managingVNICs.htm)."
   type = object({
-    assign_ipv6ip          = optional(bool, false)
-    assign_public_ip       = optional(bool, false)
-    defined_tags           = optional(map(string), null)
-    display_name           = optional(string)
-    freeform_tags          = optional(map(string), {})
-    hostname_label         = optional(string)
+    assign_ipv6ip             = optional(bool, false)
+    assign_private_dns_record = optional(bool)
+    assign_public_ip          = optional(bool, false)
+    defined_tags              = optional(map(string), null)
+    display_name              = optional(string)
+    freeform_tags             = optional(map(string), {})
+    hostname_label            = optional(string)
+    ipv6address_ipv6subnet_cidr_pair_details = optional(list(object({
+      ipv6address     = optional(string)
+      ipv6id          = optional(string)
+      ipv6subnet_cidr = optional(string)
+    })), [])
     nsg_ids                = optional(list(string), [])
     private_ip             = optional(string, null)
+    private_ip_id          = optional(string)
+    security_attributes    = optional(map(string), null)
     skip_source_dest_check = optional(bool, false)
+    subnet_cidr            = optional(string)
     subnet_id              = string
+    vlan_id                = optional(string)
   })
   default = null
 }
@@ -73,13 +83,13 @@ variable "dedicated_vm_host_id" {
 }
 
 variable "defined_tags" {
-  description = " (Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
+  description = "(Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
   default     = null
 }
 
 variable "display_name" {
-  description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. "
+  description = "(Optional) (Updatable) A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information."
   type        = string
   default     = null
 }
@@ -92,12 +102,12 @@ variable "extended_metadata" {
 
 variable "fault_domain" {
   description = "(Optional) (Updatable) A fault domain is a grouping of hardware and infrastructure within an availability domain. Each availability domain contains three fault domains. Fault domains let you distribute your instances so that they are not on the same physical hardware within a single availability domain. A hardware failure or Compute hardware maintenance that affects one fault domain does not affect instances in other fault domains."
-  type        = number
-  default     = 1
+  type        = string
+  default     = null
 }
 
 variable "freeform_tags" {
-  description = "Free-form tags for this resource"
+  description = "(Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)."
   type        = map(string)
   default     = {}
 }
@@ -178,7 +188,7 @@ variable "shape" {
 }
 
 variable "shape_config" {
-  description = "(Optional) (Updatable) The shape configuration requested for the instance"
+  description = "(Optional) (Updatable) The shape configuration requested for the instance."
   type = object({
     baseline_ocpu_utilization = optional(string)
     memory_in_gbs             = optional(number)
@@ -186,23 +196,21 @@ variable "shape_config" {
     ocpus                     = optional(number)
     vcpus                     = optional(number)
   })
-  default = {
-    memory_in_gbs = 2
-    ocpus         = 2
-  }
+  default = null
 }
 
 variable "source_details" {
+  description = "(Optional) Details for creating an instance. Use this to specify either an image or a boot volume."
   type = object({
-    source_id               = optional(string)
-    source_name             = optional(string)
-    source_type             = optional(string, "image")
-    boot_volume_size_in_gbs = optional(number, 50)
-    boot_volume_vpus_per_gb = optional(number)
-    kms_key_id              = optional(string)
+    source_id                       = optional(string)
+    source_type                     = optional(string, "image")
+    boot_volume_size_in_gbs         = optional(number, 50)
+    boot_volume_vpus_per_gb         = optional(number)
+    kms_key_id                      = optional(string)
+    is_preserve_boot_volume_enabled = optional(bool)
     instance_source_image_filter_details = optional(object({
       compartment_id           = optional(string)
-      defined_tags_filter      = optional(map(map(string)))
+      defined_tags_filter      = optional(map(string))
       operating_system         = optional(string)
       operating_system_version = optional(string)
     }))

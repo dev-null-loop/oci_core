@@ -34,26 +34,6 @@ data "cloudinit_config" "this" {
   }
 }
 
-# data "cloudinit_config" "this" {
-#   gzip          = false
-#   base64_encode = false
-#   dynamic "part" {
-#     for_each = var.cloud_init
-#     content {
-#       content_type = coalesce(part.value.content_type, "text/x-shellscript") # [WARNING]: Unhandled unknown content-type (text/plain) userdata: 'b'apiVersion: v1'...'
-#       filename     = basename(part.value.filename)
-#       content = (
-#         fileexists("${path.root}/${part.value.filename}") ?
-#         templatefile("${path.root}/${part.value.filename}", merge(part.value.vars, {})) :
-#         part.value.content != null ?
-#         templatestring(part.value.content, merge(part.value.vars, {})) :
-#         "null"
-#       )
-#       merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
-#     }
-#   }
-# }
-
 resource "oci_core_instance" "this" {
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
@@ -88,22 +68,35 @@ resource "oci_core_instance" "this" {
 
   cluster_placement_group_id = var.cluster_placement_group_id
   compute_cluster_id         = var.compute_cluster_id
-  #compute_host_group_id      = var.compute_host_group_id
 
   dynamic "create_vnic_details" {
     for_each = var.create_vnic_details[*]
     iterator = cvd
     content {
-      assign_ipv6ip          = cvd.value.assign_ipv6ip
-      assign_public_ip       = cvd.value.assign_public_ip
-      defined_tags           = cvd.value.defined_tags
-      display_name           = cvd.value.display_name
-      freeform_tags          = cvd.value.freeform_tags
-      hostname_label         = cvd.value.hostname_label
+      assign_ipv6ip             = cvd.value.assign_ipv6ip
+      assign_private_dns_record = cvd.value.assign_private_dns_record
+      assign_public_ip          = cvd.value.assign_public_ip
+      defined_tags              = cvd.value.defined_tags
+      display_name              = cvd.value.display_name
+      freeform_tags             = cvd.value.freeform_tags
+      hostname_label            = cvd.value.hostname_label
+      dynamic "ipv6address_ipv6subnet_cidr_pair_details" {
+        for_each = cvd.value.ipv6address_ipv6subnet_cidr_pair_details != null ? cvd.value.ipv6address_ipv6subnet_cidr_pair_details : []
+        iterator = iiscpd
+        content {
+          ipv6address     = iiscpd.value.ipv6address
+          ipv6id          = iiscpd.value.ipv6id
+          ipv6subnet_cidr = iiscpd.value.ipv6subnet_cidr
+        }
+      }
       nsg_ids                = cvd.value.nsg_ids
       private_ip             = cvd.value.private_ip
+      private_ip_id          = cvd.value.private_ip_id
+      security_attributes    = cvd.value.security_attributes
       skip_source_dest_check = cvd.value.skip_source_dest_check
+      subnet_cidr            = cvd.value.subnet_cidr
       subnet_id              = cvd.value.subnet_id
+      vlan_id                = cvd.value.vlan_id
     }
   }
 
@@ -111,7 +104,7 @@ resource "oci_core_instance" "this" {
   defined_tags              = var.defined_tags
   display_name              = var.display_name
   extended_metadata         = var.extended_metadata
-  fault_domain              = format("FAULT-DOMAIN-%s", var.fault_domain)
+  fault_domain              = var.fault_domain
   freeform_tags             = var.freeform_tags
   hostname_label            = var.hostname_label
   instance_configuration_id = var.instance_configuration_id
@@ -137,7 +130,7 @@ resource "oci_core_instance" "this" {
   }
 
   metadata = merge(
-    length(trimspace(var.ssh_public_keys)) > 0 ? {
+    trimspace(var.ssh_public_keys) != "" ? {
       ssh_authorized_keys = var.ssh_public_keys
     } : {},
     length(var.cloud_init) > 0 ? {
@@ -174,7 +167,8 @@ resource "oci_core_instance" "this" {
       }
     }
 
-    kms_key_id = var.source_details.kms_key_id
+    kms_key_id                      = var.source_details.kms_key_id
+    is_preserve_boot_volume_enabled = var.source_details.is_preserve_boot_volume_enabled
   }
 
   preserve_boot_volume = var.preserve_boot_volume

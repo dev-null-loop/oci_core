@@ -9,7 +9,7 @@ output "boot_volume_id" {
 }
 
 output "private_ip" {
-  description = " The private IP address of instance VNIC. To set the private IP address, use the `private_ip` argument in create_vnic_details."
+  description = "The private IP address of instance VNIC. To set the private IP address, use the `private_ip` argument in create_vnic_details."
   value       = oci_core_instance.this.private_ip
 }
 
