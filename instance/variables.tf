@@ -155,25 +155,10 @@ variable "launch_options" {
   default = null
 }
 
-variable "ssh_public_keys" {
-  description = "(Optional) List of SSH public key to connect to the instance."
-  type        = string
-  default     = ""
-  nullable    = false
-}
-
-variable "cloud_init" {
-  type = list(object({
-    filename     = optional(string)
-    content      = optional(string)
-    content_type = optional(string)
-    vars         = optional(map(string), {})
-  }))
-  default = []
-  validation {
-    condition     = alltrue([for p in var.cloud_init : p.filename != null || p.content != null])
-    error_message = "Each cloud_init part must define either filename or content."
-  }
+variable "metadata" {
+  description = "(Optional) (Updatable) Custom metadata key/value pairs that you provide, such as the SSH public key required to connect to the instance."
+  type        = map(string)
+  default     = null
 }
 
 variable "enable_vnic_lookup_outputs" {

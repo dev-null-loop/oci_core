@@ -14,26 +14,6 @@ data "oci_core_private_ips" "these" {
   }
 }
 
-data "cloudinit_config" "this" {
-  count         = length(var.cloud_init) > 0 ? 1 : 0
-  gzip          = false
-  base64_encode = false
-  dynamic "part" {
-    for_each = var.cloud_init
-    iterator = part
-    content {
-      content_type = coalesce(part.value.content_type, "text/x-shellscript")
-      filename     = part.value.filename != null ? basename(part.value.filename) : null
-      content = (
-        part.value.filename != null ?
-        templatefile("${path.root}/${part.value.filename}", part.value.vars) :
-        templatestring(part.value.content, part.value.vars)
-      )
-      merge_type = "list(append)+dict(no_replace,recurse_list)+str(append)"
-    }
-  }
-}
-
 resource "oci_core_instance" "this" {
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
@@ -129,14 +109,7 @@ resource "oci_core_instance" "this" {
     }
   }
 
-  metadata = merge(
-    trimspace(var.ssh_public_keys) != "" ? {
-      ssh_authorized_keys = var.ssh_public_keys
-    } : {},
-    length(var.cloud_init) > 0 ? {
-      user_data = base64encode(data.cloudinit_config.this[0].rendered)
-    } : {}
-  )
+  metadata = var.metadata
 
   dynamic "shape_config" {
     for_each = var.shape_config[*]
